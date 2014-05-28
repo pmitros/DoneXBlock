@@ -26,13 +26,14 @@ commands = commands.format(shortname = settings["short-name"],
                            github = settings["github"])
 
 readme = open("README.md", "w")
-readme.writelines(["{Shortname}XBlock".format(Shortname = settings["short-name"].capitalize()),
-                   "==============", 
-                   "",
-                   settings["description"],
-                   "",
-                   settings["overview"]])
+readme.write("\n".join(["{Shortname}XBlock".format(Shortname = settings["short-name"].capitalize()),
+                        "==============", 
+                        "",
+                        settings["description"],
+                        "",
+                        settings["overview"]]))
                    
+readme.close()
 
 for command in commands.split("\n"): 
     if len(command) > 0:
