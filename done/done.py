@@ -3,7 +3,7 @@
 import pkg_resources
 
 from xblock.core import XBlock
-from xblock.fields import Scope, Integer, String
+from xblock.fields import Scope, Integer, String, Boolean
 from xblock.fragment import Fragment
 
 
@@ -14,9 +14,10 @@ class DoneXBlock(XBlock):
 
     # Fields are defined on the class.  You can access them in your code as
     # self.<fieldname>.
-    src = String(
-           scope = Scope.settings, 
-           help = "URL for MP3 file to play"
+    src = Boolean(
+           scope = Scope.user_state, 
+           help = "Is the student done?",
+           default = False
         )
 
     def resource_string(self, path):
@@ -24,20 +25,25 @@ class DoneXBlock(XBlock):
         data = pkg_resources.resource_string(__name__, path)
         return data.decode("utf8")
 
-    # TO-DO: change this view to display your data your own way.
+    @XBlock.json_handler
+    def toggle_button(self, data, suffix=''):
+        print data
+        return {}
+
+
     def student_view(self, context=None):
         """
         The primary view of the DoneXBlock, shown to students
         when viewing courses.
         """
         html = self.resource_string("static/html/done.html")
-        print self.src
-        print html.format
-        frag = Fragment(html.format(src = self.src))
+        frag = Fragment(html)#.format(uid=self.scope_ids.usage_id))
+        frag.add_css_url("//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css")
+        #frag.add_javascript_url("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+        frag.add_javascript_url("//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js")
         frag.add_css(self.resource_string("static/css/done.css"))
         frag.add_javascript(self.resource_string("static/js/src/done.js"))
         frag.initialize_js('DoneXBlock')
-        print self.xml_text_content()
         return frag
 
     # TO-DO: change this to create the scenarios you'd like to see in the
@@ -48,9 +54,7 @@ class DoneXBlock(XBlock):
         return [
             ("DoneXBlock",
              """<vertical_demo>
-                  <done src="http://localhost/Ikea.mp3"> </done>
-                  <done src="http://localhost/skull.mp3"> </done>
-                  <done src="http://localhost/monkey.mp3"> </done>
+                  <done> </done>
                 </vertical_demo>
              """),
         ]
