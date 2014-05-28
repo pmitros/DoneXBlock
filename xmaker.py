@@ -1,4 +1,5 @@
 import yaml
+import os
 
 commands = '''
 git mv ./template/template.py ./template/{shortname}.py
@@ -28,12 +29,12 @@ readme.writelines(["{Shortname}XBlock".format(Shortname = settings["short-name"]
                    "==============", 
                    "",
                    settings["description"],
-                   ""
+                   "",
                    settings["overview"]])
                    
 
-for command in commands: 
-    if len(command > 0):
+for command in commands.split("\n"): 
+    if len(command) > 0:
         print command
         os.system(command)
 
