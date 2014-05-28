@@ -1,4 +1,4 @@
-"""Setup for audio XBlock."""
+"""Setup for template XBlock."""
 
 import os
 from setuptools import setup
@@ -15,19 +15,19 @@ def package_data(pkg, root):
 
 
 setup(
-    name='audio-xblock',
+    name='template-xblock',
     version='0.1',
-    description='audio XBlock',   # TODO: write a better description.
+    description='template XBlock',   # TODO: write a better description.
     packages=[
-        'audio',
+        'template',
     ],
     install_requires=[
         'XBlock',
     ],
     entry_points={
         'xblock.v1': [
-            'audio = audio:AudioXBlock',
+            'template = template:TemplateXBlock',
         ]
     },
-    package_data=package_data("audio", "static"),
+    package_data=package_data("template", "static"),
 )

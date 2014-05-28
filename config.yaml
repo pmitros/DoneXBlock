@@ -1,0 +1,17 @@
+# Welcome! 
+# 
+# Step 1: Come up with a short name for your XBlock. For example, if 
+# your XBlock plays audio files, 'audio' is a good name. 
+short-name : audio 
+# Step 2: Create a repository on github for your XBlock. In the above
+# case, I strongly recommend the short name, followed by 'XBlock,' in 
+# camelcase. Do not initialize this repo. We'll do it for you
+github : git@github.com:pmitros/AudioXBlock.git
+# Step 3: Give a short description of this XBlock
+description : Plays an audio file as an embed element
+# Step 4: Give a multiline description. Keep the 2 line indent, please. 
+overview : |
+  This XBlock plays an audio file as an HTML5 audio element. If
+  the audio element is not present, it will fall back to an 
+  embed element. 
+# Once you're done, hit save, and watch the magic happen!
