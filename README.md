@@ -1,10 +1,8 @@
-TemplateXBlock
+DoneXBlock
 ==============
 
-This is a simple template for an XBlock. It will play audio files as
-an HTML5 audio element. If unavailable, it will fall back to an embed
-element.
+Lets a student mark they've finished an activity
 
-Usage: 
-
-    <template src="http://server.tld/static/song.mp3" />
+FutureLearn uses this kind of thing to great effect. Students can 
+read text, watch videos, etc., and mark when their done. Honor 
+code grading, and convenient progress indication. 

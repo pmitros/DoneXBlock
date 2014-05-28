@@ -3,14 +3,14 @@ import yaml
 import os
 
 commands = '''
-git mv ./template/template.py ./template/{shortname}.py
-git mv ./template/static/html/template.html ./template/static/html/{shortname}.html
-git mv ./template/static/css/template.css ./template/static/css/{shortname}.css
-git mv ./template/static/js/src/template.js ./template/static/js/src/{shortname}.js
-git mv template {shortname}
+git mv ./done/done.py ./done/{shortname}.py
+git mv ./done/static/html/done.html ./done/static/html/{shortname}.html
+git mv ./done/static/css/done.css ./done/static/css/{shortname}.css
+git mv ./done/static/js/src/done.js ./done/static/js/src/{shortname}.js
+git mv done {shortname}
 
-find . -type f | grep -v git | xargs sed -i 's/template/{shortname}/g'
-find . -type f | grep -v git | xargs sed -i 's/Template/{Shortname}/g'
+find . -type f | grep -v git | xargs sed -i 's/done/{shortname}/g'
+find . -type f | grep -v git | xargs sed -i 's/Done/{Shortname}/g'
 
 git remote rm origin
 git remote add origin {github}

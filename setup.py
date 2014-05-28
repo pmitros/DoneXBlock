@@ -1,4 +1,4 @@
-"""Setup for template XBlock."""
+"""Setup for done XBlock."""
 
 import os
 from setuptools import setup
@@ -15,19 +15,19 @@ def package_data(pkg, root):
 
 
 setup(
-    name='template-xblock',
+    name='done-xblock',
     version='0.1',
-    description='template XBlock',   # TODO: write a better description.
+    description='done XBlock',   # TODO: write a better description.
     packages=[
-        'template',
+        'done',
     ],
     install_requires=[
         'XBlock',
     ],
     entry_points={
         'xblock.v1': [
-            'template = template:TemplateXBlock',
+            'done = done:DoneXBlock',
         ]
     },
-    package_data=package_data("template", "static"),
+    package_data=package_data("done", "static"),
 )

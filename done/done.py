@@ -7,7 +7,7 @@ from xblock.fields import Scope, Integer, String
 from xblock.fragment import Fragment
 
 
-class TemplateXBlock(XBlock):
+class DoneXBlock(XBlock):
     """
     This XBlock will play an MP3 file as an HTML5 audio element. 
     """
@@ -27,16 +27,16 @@ class TemplateXBlock(XBlock):
     # TO-DO: change this view to display your data your own way.
     def student_view(self, context=None):
         """
-        The primary view of the TemplateXBlock, shown to students
+        The primary view of the DoneXBlock, shown to students
         when viewing courses.
         """
-        html = self.resource_string("static/html/template.html")
+        html = self.resource_string("static/html/done.html")
         print self.src
         print html.format
         frag = Fragment(html.format(src = self.src))
-        frag.add_css(self.resource_string("static/css/template.css"))
-        frag.add_javascript(self.resource_string("static/js/src/template.js"))
-        frag.initialize_js('TemplateXBlock')
+        frag.add_css(self.resource_string("static/css/done.css"))
+        frag.add_javascript(self.resource_string("static/js/src/done.js"))
+        frag.initialize_js('DoneXBlock')
         print self.xml_text_content()
         return frag
 
@@ -46,11 +46,11 @@ class TemplateXBlock(XBlock):
     def workbench_scenarios():
         """A canned scenario for display in the workbench."""
         return [
-            ("TemplateXBlock",
+            ("DoneXBlock",
              """<vertical_demo>
-                  <template src="http://localhost/Ikea.mp3"> </template>
-                  <template src="http://localhost/skull.mp3"> </template>
-                  <template src="http://localhost/monkey.mp3"> </template>
+                  <done src="http://localhost/Ikea.mp3"> </done>
+                  <done src="http://localhost/skull.mp3"> </done>
+                  <done src="http://localhost/monkey.mp3"> </done>
                 </vertical_demo>
              """),
         ]

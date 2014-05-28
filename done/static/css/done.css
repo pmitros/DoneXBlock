@@ -1,0 +1,9 @@
+/* CSS for DoneXBlock */
+
+.done_block .count {
+    font-weight: bold;
+}
+
+.done_block p {
+    cursor: pointer;
+}
