@@ -20,6 +20,12 @@ class DoneXBlock(XBlock):
            default = False
         )
 
+    align = String(
+           scope = Scope.settings, 
+           help = "Align left/right/center",
+           default = "left"
+        )
+
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
         data = pkg_resources.resource_string(__name__, path)
@@ -48,6 +54,13 @@ class DoneXBlock(XBlock):
         #frag.add_javascript_url("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
         frag.add_javascript_url("//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js")
         frag.add_css(self.resource_string("static/css/done.css"))
+        grow_left = 1
+        grow_right = 1
+        if self.align.lower() == "left":
+            grow_left = 0
+        if self.align.lower() == "right":
+            grow_right = 0
+        frag.add_css(".done_left_spacer {{ flex-grow:{l}; }} .done_right_spacer {{ flex-grow:{r}; }}".format(r=grow_right, l=grow_left))
         frag.add_javascript("var done_done = "+("true" if self.done else "false")+";")
         frag.add_javascript(self.resource_string("static/js/src/done.js"))
         frag.initialize_js('DoneXBlock')
@@ -61,7 +74,7 @@ class DoneXBlock(XBlock):
         return [
             ("DoneXBlock",
              """<vertical_demo>
-                  <done> </done>
+                  <done align="left"> </done>
                 </vertical_demo>
              """),
         ]

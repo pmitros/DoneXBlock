@@ -1,33 +1,36 @@
 /* CSS for DoneXBlock */
 
 .done_block {
-    width:200px; 
+    width:100%; 
     height:35px;
+    display:flex;
+    flex-direction: row;
+    //padding: 5 0 -5 0;
+    //margin: -5 0 5 0;
+}
+
+.wipe {
+    -webkit-transition: width 0.2s;
+    transition: width 0.2s;
+    text-align:center;
+    vertical-align:-10;
+}
+
+.windshield_animated {
+    -webkit-transition: background-color 0.4s, box-shadow 0.4s, color 0.4s, text-shadow 0.4s, background-image 0.4s;
+    transition: background-color 0.4s, box-shadow 0.4s, color 0.4s, text-shadow 0.4s, background-image 0.4s;
+}
+
+.windshield {
     cursor: pointer;
+    width:200px; 
+    height:100%;
     border: 1px solid #0d72a2;
     border-radius: 3px;
     font-family: 'Open Sans', Verdana, Geneva, sans-serif, sans-serif;
     font-size: 13.333333015441895px;
     font-weight : bold;
     letter-spacing: normal;
-    //padding: 5 0 -5 0;
-    //margin: -5 0 5 0;
-}
-
-.wipe {
-  -webkit-transition: width 0.2s;
-  transition: width 0.2s;
-  text-align:center;
-  vertical-align:-10;
-}
-
-.windshield_animated {
-  -webkit-transition: background-color 0.4s, box-shadow 0.4s, color 0.4s, text-shadow 0.4s, background-image 0.4s;
-  transition: background-color 0.4s, box-shadow 0.4s, color 0.4s, text-shadow 0.4s, background-image 0.4s;
-}
-
-.windshield {
-  height:100%;
 }
 
 .windshield_on { // "Mark as complete"
