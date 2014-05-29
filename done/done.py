@@ -3,7 +3,7 @@
 import pkg_resources
 
 from xblock.core import XBlock
-from xblock.fields import Scope, Integer, String, Boolean
+from xblock.fields import Scope, Integer, String, Boolean, DateTime, Float
 from xblock.fragment import Fragment
 
 
