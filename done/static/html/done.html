@@ -1,9 +1,9 @@
 <div class="done_block">
-  <div style="width:150px">
-    <div class="windshield_on windshield"> 
-      <div class="wipe wipe_on"> Wipe on </div>
-      <div class="wiper"> # </div>
-      <div class="wipe wipe_off"> Wipe off </div>
+  <div style="width:200px; height:30px;">
+    <div class="windshield"> 
+      <div class="wipe wipe_off"> Undo </div>
+      <div class="wiper"> <span class="ui-icon ui-icon-circle-plus"></span> </div>
+      <div class="wipe wipe_on"> Mark as complete </div>
     </div>
   </div>
 </div>
@@ -13,24 +13,31 @@
   -webkit-transition: width 0.2s;
   transition: width 0.2s;
   text-align:center;
+  vertical-align:middle;
 }
 
-.windshield {
+.windshield_animated {
   -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 
+.windshield {
+  height:100%;
+}
+
 .windshield_on {
   background-color: #700000;
+  color: #4BA1A1;
 }
 
 .windshield_off {
   background-color: #048904;
+  color: #D59763;
 }
 
 .windshield_on .wipe_on {
   display:inline-block;
-  width:60%;
+  width:80%;
   overflow:hidden;
   text-overflow: clip;
   white-space:nowrap;
@@ -47,11 +54,12 @@
 .wiper {
   display:inline-block;
   width:7%;
+  vertical-align:middle;
 }
 
 .windshield_off .wipe_off {
   display:inline-block;
-  width:60%;
+  width:80%;
   overflow:hidden;
   text-overflow: clip;
   white-space:nowrap;

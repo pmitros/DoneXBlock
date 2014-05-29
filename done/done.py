@@ -14,7 +14,7 @@ class DoneXBlock(XBlock):
 
     # Fields are defined on the class.  You can access them in your code as
     # self.<fieldname>.
-    src = Boolean(
+    done = Boolean(
            scope = Scope.user_state, 
            help = "Is the student done?",
            default = False
@@ -27,7 +27,13 @@ class DoneXBlock(XBlock):
 
     @XBlock.json_handler
     def toggle_button(self, data, suffix=''):
-        print data
+        self.done = data['done']
+        if data['done']:
+            grade = 1
+        else:
+            grade = 0
+
+        self.runtime.publish(self, 'grade', {'value':grade, 'max_value': 1})
         return {}
 
 
@@ -42,6 +48,7 @@ class DoneXBlock(XBlock):
         #frag.add_javascript_url("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
         frag.add_javascript_url("//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js")
         frag.add_css(self.resource_string("static/css/done.css"))
+        frag.add_javascript("var done_done = "+("true" if self.done else "false")+";")
         frag.add_javascript(self.resource_string("static/js/src/done.js"))
         frag.initialize_js('DoneXBlock')
         return frag

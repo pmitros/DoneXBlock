@@ -16,3 +16,9 @@ to reach out to FutureLearn for permission. This is probably worth
 doing -- it'd be to the benefit of learners on all platforms and the
 industry as a whole if we could aim for consistency of experience
 between platforms where convenient.
+
+Limitations: 
+
+* We can only have one of these per page. I'm waiting on XBlocks to
+  have a more mature client-side framework, since right now, managing
+  multiple per page would be messy.
