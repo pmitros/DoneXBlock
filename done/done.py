@@ -63,9 +63,11 @@ class DoneXBlock(XBlock):
         if self.align.lower() == "right":
             grow_right = 0
         frag.add_css(".done_left_spacer {{ flex-grow:{l}; }} .done_right_spacer {{ flex-grow:{r}; }}".format(r=grow_right, l=grow_left))
-        frag.add_javascript("var done_done = "+("true" if self.done else "false")+";")
         frag.add_javascript(self.resource_string("static/js/src/done.js"))
-        frag.initialize_js('DoneXBlock')
+        if self.done:
+            frag.initialize_js("DoneXBlockOn")
+        else:
+            frag.initialize_js("DoneXBlockOff")
         return frag
 
     # TO-DO: change this to create the scenarios you'd like to see in the
@@ -76,6 +78,7 @@ class DoneXBlock(XBlock):
         return [
             ("DoneXBlock",
              """<vertical_demo>
+                  <done align="left"> </done>
                   <done align="left"> </done>
                 </vertical_demo>
              """),
