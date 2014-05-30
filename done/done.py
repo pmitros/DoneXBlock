@@ -1,4 +1,4 @@
-"""TO-DO: Write a description of what this XBlock is."""
+"""TO-DO: Show a toggle which lets students mark things as done."""
 
 import pkg_resources
 
