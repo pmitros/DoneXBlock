@@ -1,33 +1,26 @@
 function DoneXBlock(runtime, element) {
-
-    function updateCount(result) {
-        console.log("Success");
-    }
-
     var handlerUrl = runtime.handlerUrl(element, 'toggle_button');
 
-    $('p', element).click(function(eventObject) {
-    });
+    function updateCount(result) {}
 
     $(function ($) {
 	if (done_done) {
-	    $('.windshield').addClass("windshield_off").removeClass("windshield_on");
+	    $('.done_windshield', element).addClass("done_windshield_off").removeClass("done_windshield_on");
 	} else {
-	    $('.windshield').addClass("windshield_on").removeClass("windshield_off");
+	    $('.done_windshield', element).addClass("done_windshield_on").removeClass("done_windshield_off");
 	}
 	// Don't have animations on for above class changes. This is probably not necessary. I 
 	// was seeing animations on page load. I did a few things to fix it. The line below 
 	// wasn't the one that fixed it, but I decided to keep it anyways. 
-	$('.windshield').addClass("windshield_animated")
-	$('.windshield').click(function(){
-            $(this).toggleClass("windshield_on");
-            $(this).toggleClass("windshield_off");
+	$('.done_windshield', element).addClass("done_windshield_animated")
+	$('.done_windshield', element).click(function(){
+            $(this).toggleClass("done_windshield_on");
+            $(this).toggleClass("done_windshield_off");
 	    $.ajax({
 		type: "POST",
 		url: handlerUrl,
 		data: JSON.stringify({"done":$(this).hasClass("windshield_off")}),
 		success: updateCount
-          
 	    });
 	});
     });

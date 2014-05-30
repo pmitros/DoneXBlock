@@ -9,7 +9,7 @@ from xblock.fragment import Fragment
 
 class DoneXBlock(XBlock):
     """
-    This XBlock will play an MP3 file as an HTML5 audio element. 
+    Show a toggle which lets students mark things as done.
     """
 
     # Fields are defined on the class.  You can access them in your code as
