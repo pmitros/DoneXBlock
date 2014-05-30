@@ -19,7 +19,7 @@ function DoneXBlock(runtime, element) {
 	    $.ajax({
 		type: "POST",
 		url: handlerUrl,
-		data: JSON.stringify({"done":$(this).hasClass("windshield_off")}),
+		data: JSON.stringify({"done":$(this).hasClass("done_windshield_off")}),
 		success: updateCount
 	    });
 	});
