@@ -17,7 +17,7 @@ both platforms would have consistency of user experience between
 MOOCs. I didn't copy them exactly since I wanted to be unambiguously 
 in the clear with IP issues around look-and-feel, and this was on a short
 anough timeline that I did not have a chance to reach out to
-FutureLearn for permission. However, this kind of collaboration
+FutureLearn for permission. As a footnote, this kind of collaboration
 between MOOC providers is probably worth pursuing -- it'd be to the
 benefit of learners on all platforms, and ultimately, the industry as
 a whole if we had consistency of experience between platforms where
