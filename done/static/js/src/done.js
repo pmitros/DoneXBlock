@@ -1,15 +1,9 @@
-function DoneXBlockOn(runtime, element) {
-    $('.done_windshield', element).addClass("done_windshield_off").removeClass("done_windshield_on");
-    DoneXBlock(runtime, element);
-}
-
-function DoneXBlockOff(runtime, element) {
-    console.log("b");
-    $('.done_windshield', element).addClass("done_windshield_on").removeClass("done_windshield_off");
-    DoneXBlock(runtime, element);
-}
-
-function DoneXBlock(runtime, element) {
+function DoneXBlock(runtime, element, data) {
+    if (data.state) {
+	$('.done_windshield', element).addClass("done_windshield_off").removeClass("done_windshield_on");
+    } else {
+	$('.done_windshield', element).addClass("done_windshield_on").removeClass("done_windshield_off");
+    }
     var handlerUrl = runtime.handlerUrl(element, 'toggle_button');
 
     function updateCount(result) {}

@@ -64,10 +64,7 @@ class DoneXBlock(XBlock):
             grow_right = 0
         frag.add_css(".done_left_spacer {{ flex-grow:{l}; }} .done_right_spacer {{ flex-grow:{r}; }}".format(r=grow_right, l=grow_left))
         frag.add_javascript(self.resource_string("static/js/src/done.js"))
-        if self.done:
-            frag.initialize_js("DoneXBlockOn")
-        else:
-            frag.initialize_js("DoneXBlockOff")
+        frag.initialize_js("DoneXBlock", {'state':self.done})
         return frag
 
     # TO-DO: change this to create the scenarios you'd like to see in the
