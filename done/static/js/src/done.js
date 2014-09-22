@@ -14,6 +14,13 @@ function DoneXBlock(runtime, element, data) {
 	// wasn't the one that fixed it, but I decided to keep it anyways. 
 	$('.done_windshield', element).addClass("done_windshield_animated")
 	$('.done_windshield', element).click(function(){
+        if($(this).attr("aria-checked") == "true"){
+            $(this).attr("aria-checked", "false");                      // checkbox state unchecked
+            $('#xb_done_status', element).html(" Mark as complete ");   // accessible label
+        } else {
+            $(this).attr("aria-checked", "true");                       // checkbox state checked
+            $('#xb_done_status', element).html(" Mark as incomplete "); // accessible label
+        }
             $(this).toggleClass("done_windshield_on");
             $(this).toggleClass("done_windshield_off");
 	    $.ajax({
