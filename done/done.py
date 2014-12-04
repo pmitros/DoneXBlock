@@ -1,11 +1,11 @@
 """TO-DO: Show a toggle which lets students mark things as done."""
 
 import pkg_resources
+import uuid
 
 from xblock.core import XBlock
 from xblock.fields import Scope, Integer, String, Boolean, DateTime, Float
 from xblock.fragment import Fragment
-
 
 class DoneXBlock(XBlock):
     """
@@ -50,7 +50,10 @@ class DoneXBlock(XBlock):
         The primary view of the DoneXBlock, shown to students
         when viewing courses.
         """
-        html = self.resource_string("static/html/done.html")
+        html = self.resource_string("static/html/done.html").format(done=self.done, 
+                                                                    id=uuid.uuid1(0))
+        unchecked_png = self.runtime.local_resource_url(self, 'public/check-empty.png');
+        checked_png = self.runtime.local_resource_url(self, 'public/check-full.png');
         frag = Fragment(html)#.format(uid=self.scope_ids.usage_id))
         frag.add_css_url("//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css")
         #frag.add_javascript_url("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
@@ -64,7 +67,9 @@ class DoneXBlock(XBlock):
             grow_right = 0
         frag.add_css(".done_left_spacer {{ flex-grow:{l}; }} .done_right_spacer {{ flex-grow:{r}; }}".format(r=grow_right, l=grow_left))
         frag.add_javascript(self.resource_string("static/js/src/done.js"))
-        frag.initialize_js("DoneXBlock", {'state':self.done})
+        frag.initialize_js("DoneXBlock", {'state':self.done, 
+                                          'unchecked':unchecked_png, 
+                                          'checked':checked_png})
         return frag
 
     # TO-DO: change this to create the scenarios you'd like to see in the
