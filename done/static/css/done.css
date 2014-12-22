@@ -8,10 +8,18 @@
     width:1px;
 }
 
+.done_onoffswitch_wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
 .done_onoffswitch {
     position: relative; width: 180px;
+    width: 180px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
+
 .done_onoffswitch-checkbox {
     display: none;
 }

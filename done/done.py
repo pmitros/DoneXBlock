@@ -4,26 +4,25 @@ import pkg_resources
 import uuid
 
 from xblock.core import XBlock
-from xblock.fields import Scope, Integer, String, Boolean, DateTime, Float
+from xblock.fields import Scope, String, Boolean, DateTime, Float
 from xblock.fragment import Fragment
+
 
 class DoneXBlock(XBlock):
     """
     Show a toggle which lets students mark things as done.
     """
 
-    # Fields are defined on the class.  You can access them in your code as
-    # self.<fieldname>.
     done = Boolean(
-           scope = Scope.user_state, 
-           help = "Is the student done?",
-           default = False
+           scope=Scope.user_state,
+           help="Is the student done?",
+           default=False
         )
 
     align = String(
-           scope = Scope.settings, 
-           help = "Align left/right/center",
-           default = "left"
+           scope=Scope.settings,
+           help="Align left/right/center",
+           default="left"
         )
 
     has_score = True
@@ -35,45 +34,39 @@ class DoneXBlock(XBlock):
 
     @XBlock.json_handler
     def toggle_button(self, data, suffix=''):
+        """
+        Ajax call when the button is clicked. Input is a JSON dictionary
+        with one boolean field: `done`. This will save this in the
+        XBlock field, and then issue an appropriate grade. 
+        """
         self.done = data['done']
         if data['done']:
             grade = 1
         else:
             grade = 0
 
-        self.runtime.publish(self, 'grade', {'value':grade, 'max_value': 1})
+        self.runtime.publish(self, 'grade', {'value': grade, 'max_value': 1})
         return {}
-
 
     def student_view(self, context=None):
         """
         The primary view of the DoneXBlock, shown to students
         when viewing courses.
         """
-        html = self.resource_string("static/html/done.html").format(done=self.done, 
-                                                                    id=uuid.uuid1(0))
-        unchecked_png = self.runtime.local_resource_url(self, 'public/check-empty.png');
-        checked_png = self.runtime.local_resource_url(self, 'public/check-full.png');
-        frag = Fragment(html)#.format(uid=self.scope_ids.usage_id))
-        frag.add_css_url("//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css")
-        #frag.add_javascript_url("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
-        frag.add_javascript_url("//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js")
+        html_resource = self.resource_string("static/html/done.html")
+        html = html_resource.format(done=self.done,
+                                    id=uuid.uuid1(0))
+        unchecked_png = self.runtime.local_resource_url(self, 'public/check-empty.png')
+        checked_png = self.runtime.local_resource_url(self, 'public/check-full.png')
+        frag = Fragment(html)
         frag.add_css(self.resource_string("static/css/done.css"))
-        grow_left = 1
-        grow_right = 1
-        if self.align.lower() == "left":
-            grow_left = 0
-        if self.align.lower() == "right":
-            grow_right = 0
-        frag.add_css(".done_left_spacer {{ flex-grow:{l}; }} .done_right_spacer {{ flex-grow:{r}; }}".format(r=grow_right, l=grow_left))
         frag.add_javascript(self.resource_string("static/js/src/done.js"))
-        frag.initialize_js("DoneXBlock", {'state':self.done, 
-                                          'unchecked':unchecked_png, 
-                                          'checked':checked_png})
+        frag.initialize_js("DoneXBlock", {'state': self.done,
+                                          'unchecked': unchecked_png,
+                                          'checked': checked_png,
+                                          'align': self.align.lower()})
         return frag
 
-    # TO-DO: change this to create the scenarios you'd like to see in the
-    # workbench while developing your XBlock.
     @staticmethod
     def workbench_scenarios():
         """A canned scenario for display in the workbench."""
@@ -81,14 +74,14 @@ class DoneXBlock(XBlock):
             ("DoneXBlock",
              """<vertical_demo>
                   <done align="left"> </done>
-                  <done align="left"> </done>
+                  <done align="right"> </done>
                 </vertical_demo>
              """),
         ]
 
     ## Everything below is stolen from https://github.com/edx/edx-ora2/blob/master/apps/openassessment/xblock/lms_mixin.py
-    ## It's needed to keep the LMS+Studio happy. 
-    ## It should be included as a mixin. 
+    ## It's needed to keep the LMS+Studio happy.
+    ## It should be included as a mixin.
 
     display_name = String(
         default="Completion", scope=Scope.settings,

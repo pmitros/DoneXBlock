@@ -10,23 +10,30 @@ function update_knob(element, data) {
 
 function DoneXBlock(runtime, element, data) {
     $('.done_onoffswitch-checkbox', element).prop("checked", data.state);
+
+    var grow_left = 1;
+    var grow_right = 1;
+
+    if (data.align == "left") {
+	grow_left = 0;
+    }
+    if (data.align == "right") {
+	grow_right = 0;
+    }
+
+    $('.done_left_spacer', element).css("flex-grow", grow_left.toString());
+    $('.done_right_spacer', element).css("flex-grow", grow_right.toString());
+
     update_knob(element, data);
     var handlerUrl = runtime.handlerUrl(element, 'toggle_button');
 
-    function updateCount(result) {}
-
     $(function ($) {
-	// Don't have animations on for above class changes. This is probably not necessary. I 
-	// was seeing animations on page load. I did a few things to fix it. The line below 
-	// wasn't the one that fixed it, but I decided to keep it anyways. 
-	//$('.done_block', element).addClass("done_windshield_animated");
 	$('.done_onoffswitch', element).addClass("done_animated");
 	$('.done_onoffswitch-checkbox', element).change(function(){
 	    $.ajax({
 		type: "POST",
 		url: handlerUrl,
 		data: JSON.stringify({"done":$('.done_onoffswitch-checkbox', element).prop("checked")}),
-		success: updateCount
 	    });
 	    update_knob(element, data);
 	});
