@@ -67,6 +67,10 @@ class DoneXBlock(XBlock):
                                           'align': self.align.lower()})
         return frag
 
+    def studio_view(self, _context=None):  # pylint: disable=unused-argument
+        frag = Fragment(pkg_resources.resource_string("static/html/studioview.html"))
+        return frag
+
     @staticmethod
     def workbench_scenarios():
         """A canned scenario for display in the workbench."""
