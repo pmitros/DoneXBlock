@@ -120,3 +120,9 @@ class DoneXBlock(XBlock):
         """The maximum raw score of our problem.
         """
         return 1
+
+    ## More dummy code to keep Studio happy
+    def studio_view(self, context=None):
+        """ View for editing Instructor Tool block in Studio. """
+        # Display friendly message explaining that the block is not editable.
+        return Fragment(u'<p>This block requires no configuration in Studio. A small number of advanced parameters are available via OLX.</p>')
