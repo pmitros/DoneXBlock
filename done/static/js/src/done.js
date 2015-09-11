@@ -1,3 +1,11 @@
+/* Dummy code to make sure events work in Workbench as well as
+ * edx-platform*/
+if (typeof Logger === 'undefined') {
+    var Logger = {
+        log: function(a, b) { return; }
+    }
+}
+
 function update_knob(element, data) {
   if($('.done_onoffswitch-checkbox', element).prop("checked")) {
     $(".done_onoffswitch-switch", element).css("background-image", "url("+data['checked']+")");
@@ -30,11 +38,13 @@ function DoneXBlock(runtime, element, data) {
     $(function ($) {
 	$('.done_onoffswitch', element).addClass("done_animated");
 	$('.done_onoffswitch-checkbox', element).change(function(){
+	    var checked = $('.done_onoffswitch-checkbox', element).prop("checked");
 	    $.ajax({
 		type: "POST",
 		url: handlerUrl,
-		data: JSON.stringify({"done":$('.done_onoffswitch-checkbox', element).prop("checked")}),
+		data: JSON.stringify({'done':checked}),
 	    });
+	    Logger.log("edx.done.toggle", {'done': checked});
 	    update_knob(element, data);
 	});
     });

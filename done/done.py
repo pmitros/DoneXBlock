@@ -1,4 +1,4 @@
-"""TO-DO: Show a toggle which lets students mark things as done."""
+""" Show a toggle which lets students mark things as done."""
 
 import pkg_resources
 import uuid
@@ -7,6 +7,24 @@ from xblock.core import XBlock
 from xblock.fields import Scope, String, Boolean, DateTime, Float
 from xblock.fragment import Fragment
 
+try:
+    from eventtracking import tracker
+except ImportError:
+    class tracker(object):  # pylint: disable=invalid-name
+        """
+        Define tracker if eventtracking cannot be imported. This is a workaround
+        so that the code works in both edx-platform and XBlock workbench (the latter
+        of which does not support event emission). This should be replaced with XBlock's
+        emit(), but at present, emit() is broken.
+        """
+        def __init__(self):
+            """ Do nothing """
+            pass
+
+        @staticmethod
+        def emit(param1, param2):
+            """ In workbench, do nothing for event emission """
+            pass
 
 class DoneXBlock(XBlock):
     """
@@ -46,6 +64,9 @@ class DoneXBlock(XBlock):
             grade = 0
 
         self.runtime.publish(self, 'grade', {'value': grade, 'max_value': 1})
+        # Above should emit a similar event. Once it does, we should be
+        # able to eliminate this
+        tracker.emit("edx.done.toggle", {'done': self.done})
         return {}
 
     def student_view(self, context=None):
