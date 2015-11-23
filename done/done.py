@@ -12,10 +12,11 @@ try:
 except ImportError:
     class tracker(object):  # pylint: disable=invalid-name
         """
-        Define tracker if eventtracking cannot be imported. This is a workaround
-        so that the code works in both edx-platform and XBlock workbench (the latter
-        of which does not support event emission). This should be replaced with XBlock's
-        emit(), but at present, emit() is broken.
+        Define tracker if eventtracking cannot be imported. This is a
+        workaround so that the code works in both edx-platform and
+        XBlock workbench (the latter of which does not support event
+        emission). This should be replaced with XBlock's emit(), but
+        at present, emit() is broken.
         """
         def __init__(self):
             """ Do nothing """
@@ -26,36 +27,39 @@ except ImportError:
             """ In workbench, do nothing for event emission """
             pass
 
+
+def resource_string(path):
+    """Handy helper for getting resources from our kit."""
+    data = pkg_resources.resource_string(__name__, path)
+    return data.decode("utf8")
+
+
 class DoneXBlock(XBlock):
     """
     Show a toggle which lets students mark things as done.
     """
 
     done = Boolean(
-           scope=Scope.user_state,
-           help="Is the student done?",
-           default=False
-        )
+        scope=Scope.user_state,
+        help="Is the student done?",
+        default=False
+    )
 
     align = String(
-           scope=Scope.settings,
-           help="Align left/right/center",
-           default="left"
-        )
+        scope=Scope.settings,
+        help="Align left/right/center",
+        default="left"
+    )
 
     has_score = True
 
-    def resource_string(self, path):
-        """Handy helper for getting resources from our kit."""
-        data = pkg_resources.resource_string(__name__, path)
-        return data.decode("utf8")
-
+    # pylint: disable=unused-argument
     @XBlock.json_handler
     def toggle_button(self, data, suffix=''):
         """
         Ajax call when the button is clicked. Input is a JSON dictionary
         with one boolean field: `done`. This will save this in the
-        XBlock field, and then issue an appropriate grade. 
+        XBlock field, and then issue an appropriate grade.
         """
         self.done = data['done']
         if data['done']:
@@ -67,21 +71,24 @@ class DoneXBlock(XBlock):
         # Above should emit a similar event. Once it does, we should be
         # able to eliminate this
         tracker.emit("edx.done.toggle", {'done': self.done})
-        return {}
+        return {'state': self.done}
 
-    def student_view(self, context=None):
+    def student_view(self, context=None):  # pylint: disable=unused-argument
         """
         The primary view of the DoneXBlock, shown to students
         when viewing courses.
         """
-        html_resource = self.resource_string("static/html/done.html")
+        html_resource = resource_string("static/html/done.html")
         html = html_resource.format(done=self.done,
                                     id=uuid.uuid1(0))
-        unchecked_png = self.runtime.local_resource_url(self, 'public/check-empty.png')
-        checked_png = self.runtime.local_resource_url(self, 'public/check-full.png')
+        (unchecked_png, checked_png) = (
+            self.runtime.local_resource_url(self, x) for x in
+            ('public/check-empty.png', 'public/check-full.png')
+        )
+
         frag = Fragment(html)
-        frag.add_css(self.resource_string("static/css/done.css"))
-        frag.add_javascript(self.resource_string("static/js/src/done.js"))
+        frag.add_css(resource_string("static/css/done.css"))
+        frag.add_javascript(resource_string("static/js/src/done.js"))
         frag.initialize_js("DoneXBlock", {'state': self.done,
                                           'unchecked': unchecked_png,
                                           'checked': checked_png,
@@ -89,7 +96,11 @@ class DoneXBlock(XBlock):
         return frag
 
     def studio_view(self, _context=None):  # pylint: disable=unused-argument
-        frag = Fragment(pkg_resources.resource_string("static/html/studioview.html"))
+        '''
+        Minimal view with no configuration options giving some help text.
+        '''
+        html = resource_string("static/html/studioview.html")
+        frag = Fragment(html)
         return frag
 
     @staticmethod
@@ -104,9 +115,11 @@ class DoneXBlock(XBlock):
              """),
         ]
 
-    ## Everything below is stolen from https://github.com/edx/edx-ora2/blob/master/apps/openassessment/xblock/lms_mixin.py
-    ## It's needed to keep the LMS+Studio happy.
-    ## It should be included as a mixin.
+    # Everything below is stolen from
+    # https://github.com/edx/edx-ora2/blob/master/apps/openassessment/
+    #        xblock/lms_mixin.py
+    # It's needed to keep the LMS+Studio happy.
+    # It should be included as a mixin.
 
     display_name = String(
         default="Completion", scope=Scope.settings,
@@ -115,12 +128,14 @@ class DoneXBlock(XBlock):
 
     start = DateTime(
         default=None, scope=Scope.settings,
-        help="ISO-8601 formatted string representing the start date of this assignment. We ignore this."
+        help="ISO-8601 formatted string representing the start date "
+             "of this assignment. We ignore this."
     )
 
     due = DateTime(
         default=None, scope=Scope.settings,
-        help="ISO-8601 formatted string representing the due date of this assignment. We ignore this."
+        help="ISO-8601 formatted string representing the due date "
+             "of this assignment. We ignore this."
     )
 
     weight = Float(
@@ -141,9 +156,3 @@ class DoneXBlock(XBlock):
         """The maximum raw score of our problem.
         """
         return 1
-
-    ## More dummy code to keep Studio happy
-    def studio_view(self, context=None):
-        """ View for editing Instructor Tool block in Studio. """
-        # Display friendly message explaining that the block is not editable.
-        return Fragment(u'<p>This block requires no configuration in Studio. A small number of advanced parameters are available via OLX.</p>')
