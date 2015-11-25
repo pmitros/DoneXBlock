@@ -61,16 +61,18 @@ class DoneXBlock(XBlock):
         with one boolean field: `done`. This will save this in the
         XBlock field, and then issue an appropriate grade.
         """
-        self.done = data['done']
-        if data['done']:
-            grade = 1
-        else:
-            grade = 0
+        if 'done' in data:
+            self.done = data['done']
+            if data['done']:
+                grade = 1
+            else:
+                grade = 0
+            grade_event = {'value': grade, 'max_value': 1}
+            self.runtime.publish(self, 'grade', grade_event)
+            # This should move to self.runtime.publish, once that pipeline
+            # is finished for XBlocks.
+            tracker.emit("edx.done.toggle", {'done': self.done})        
 
-        self.runtime.publish(self, 'grade', {'value': grade, 'max_value': 1})
-        # Above should emit a similar event. Once it does, we should be
-        # able to eliminate this
-        tracker.emit("edx.done.toggle", {'done': self.done})
         return {'state': self.done}
 
     def student_view(self, context=None):  # pylint: disable=unused-argument
