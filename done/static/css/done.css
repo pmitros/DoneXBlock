@@ -79,3 +79,19 @@
 .done_onoffswitch-checkbox:checked + .done_onoffswitch-label .done_onoffswitch-switch {
     right: 0px; 
 }
+
+.done-checked {
+    background-color: #018801;
+}
+
+.done-unchecked {
+    background-color: #FFFFFF;
+}
+
+.done_grow {
+    flex-grow: 1;
+}
+
+.done_nogrow {
+    flex-grow: 0;
+}

@@ -3,7 +3,7 @@
 if (typeof Logger === 'undefined') {
     var Logger = {
         log: function(a, b) { return; }
-    }
+    };
 }
 
 function update_knob(element, data) {
@@ -19,18 +19,12 @@ function update_knob(element, data) {
 function DoneXBlock(runtime, element, data) {
     $('.done_onoffswitch-checkbox', element).prop("checked", data.state);
 
-    var grow_left = 1;
-    var grow_right = 1;
-
-    if (data.align == "left") {
-	grow_left = 0;
+    if (data.align != "right") {
+	$('.done_right_spacer', element).addClass("done_grow");
     }
-    if (data.align == "right") {
-	grow_right = 0;
+    if (data.align != "left") {
+	$('.done_left_spacer', element).addClass("done_grow");
     }
-
-    $('.done_left_spacer', element).css("flex-grow", grow_left.toString());
-    $('.done_right_spacer', element).css("flex-grow", grow_right.toString());
 
     update_knob(element, data);
     var handlerUrl = runtime.handlerUrl(element, 'toggle_button');
@@ -42,7 +36,7 @@ function DoneXBlock(runtime, element, data) {
 	    $.ajax({
 		type: "POST",
 		url: handlerUrl,
-		data: JSON.stringify({'done':checked}),
+		data: JSON.stringify({'done':checked})
 	    });
 	    Logger.log("edx.done.toggle", {'done': checked});
 	    update_knob(element, data);
