@@ -7,27 +7,6 @@ from xblock.core import XBlock
 from xblock.fields import Scope, String, Boolean, DateTime, Float
 from xblock.fragment import Fragment
 
-try:
-    from eventtracking import tracker
-except ImportError:
-    class tracker(object):  # pylint: disable=invalid-name
-        """
-        Define tracker if eventtracking cannot be imported. This is a
-        workaround so that the code works in both edx-platform and
-        XBlock workbench (the latter of which does not support event
-        emission). This should be replaced with XBlock's emit(), but
-        at present, emit() is broken.
-        """
-        def __init__(self):
-            """ Do nothing """
-            pass
-
-        @staticmethod
-        def emit(param1, param2):
-            """ In workbench, do nothing for event emission """
-            pass
-
-
 def resource_string(path):
     """Handy helper for getting resources from our kit."""
     data = pkg_resources.resource_string(__name__, path)
@@ -71,7 +50,7 @@ class DoneXBlock(XBlock):
             self.runtime.publish(self, 'grade', grade_event)
             # This should move to self.runtime.publish, once that pipeline
             # is finished for XBlocks.
-            tracker.emit("edx.done.toggle", {'done': self.done})        
+            self.runtime.publish(self, "edx.done.toggled", {'done': self.done})
 
         return {'state': self.done}
 
