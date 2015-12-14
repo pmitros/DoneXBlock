@@ -38,7 +38,7 @@ function DoneXBlock(runtime, element, data) {
 		url: handlerUrl,
 		data: JSON.stringify({'done':checked})
 	    });
-	    Logger.log("edx.done.toggle", {'done': checked});
+	    Logger.log("edx.done.toggled", {'done': checked});
 	    update_knob(element, data);
 	});
     });
