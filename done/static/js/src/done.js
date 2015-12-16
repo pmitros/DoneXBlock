@@ -7,6 +7,14 @@ if (typeof Logger === 'undefined') {
 }
 
 function update_knob(element, data) {
+    /*
+      We manipulate CSS directly since we do not have access to
+      data['checked'] and data['unchecked'] in the CSS file. This is
+      the least of all evils (relative to templating into the .css
+      file or similar). 
+
+      It makes sense to keep image and color together.
+     */
   if($('.done_onoffswitch-checkbox', element).prop("checked")) {
     $(".done_onoffswitch-switch", element).css("background-image", "url("+data['checked']+")");
     $(".done_onoffswitch-switch", element).css("background-color", "#018801;");
