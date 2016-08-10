@@ -95,3 +95,27 @@
 .done_nogrow {
     flex-grow: 0;
 }
+
+/* Right to left (rtl) language css */
+
+body.rtl .done_onoffswitch-checkbox:checked + .done_onoffswitch-label .done_onoffswitch-inner {
+    margin-right: 0;
+}
+body.rtl .done_onoffswitch-checkbox:checked + .done_onoffswitch-label .done_onoffswitch-switch {
+    right: 0px;
+}
+
+body.rtl .done_onoffswitch-inner {
+    margin-right: -100%;
+}
+
+body.rtl .done_onoffswitch-inner:before {
+    padding-right: 10px;
+    text-align: right;
+}
+
+body.rtl .done_onoffswitch-inner:after {
+    padding-left: 22px;
+    float: left;
+    text-align: left;
+}
