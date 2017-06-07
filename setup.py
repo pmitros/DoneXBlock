@@ -27,6 +27,9 @@ setup(
     entry_points={
         'xblock.v1': [
             'done = done:DoneXBlock',
+        ],
+        'xblock.test.v0': [
+            'done = done.tests:TestDone'
         ]
     },
     package_data=package_data("done", "static"),
