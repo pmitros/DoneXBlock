@@ -19,13 +19,6 @@ function update_knob(element, data) {
 function DoneXBlock(runtime, element, data) {
     $('.done_onoffswitch-checkbox', element).prop("checked", data.state);
 
-    if (data.align != "right") {
-	$('.done_right_spacer', element).addClass("done_grow");
-    }
-    if (data.align != "left") {
-	$('.done_left_spacer', element).addClass("done_grow");
-    }
-
     update_knob(element, data);
     var handlerUrl = runtime.handlerUrl(element, 'toggle_button');
 

@@ -1,12 +1,16 @@
 """ Show a toggle which lets students mark things as done."""
 
 import pkg_resources
+import os
 import uuid
 
+from django.template import Context
 from xblock.core import XBlock
 from xblock.fields import Scope, String, Boolean, DateTime, Float
 from xblock.fragment import Fragment
-try: 
+from xblockutils.resources import ResourceLoader
+
+try:
     from xblock.completable import CompletableXBlockMixin
 except ImportError:
     class CompletableXBlockMixin:
@@ -15,30 +19,46 @@ except ImportError:
             pass
 
 
+def _(str):
+    """
+    Dummy ugettext.
+    """
+    return str
+
+
 def resource_string(path):
     """Handy helper for getting resources from our kit."""
     data = pkg_resources.resource_string(__name__, path)
     return data.decode("utf8")
 
 
+@XBlock.needs("i18n")
 class DoneXBlock(XBlock, CompletableXBlockMixin):
     """
     Show a toggle which lets students mark things as done.
     """
+    loader = ResourceLoader(__name__)
 
     done = Boolean(
         scope=Scope.user_state,
-        help="Is the student done?",
+        help=_("Is the student done?"),
         default=False
     )
 
     align = String(
         scope=Scope.settings,
-        help="Align left/right/center",
+        help=_("Align left/right/center"),
         default="left"
     )
 
     has_score = True
+
+    def render_template(self, path, context=None):
+        return self.loader.render_django_template(
+            os.path.join("static/html", path),
+            context=Context(context or {}),
+            i18n_service=self.runtime.service(self, "i18n"),
+        )
 
     # pylint: disable=unused-argument
     @XBlock.json_handler
@@ -68,9 +88,11 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
         The primary view of the DoneXBlock, shown to students
         when viewing courses.
         """
-        html_resource = resource_string("static/html/done.html")
-        html = html_resource.format(done=self.done,
-                                    id=uuid.uuid1(0))
+        html = self.render_template("done.html", {
+            'done': self.done,
+            'id': uuid.uuid1(0),
+        })
+
         (unchecked_png, checked_png) = (
             self.runtime.local_resource_url(self, x) for x in
             ('public/check-empty.png', 'public/check-full.png')
@@ -89,7 +111,7 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
         '''
         Minimal view with no configuration options giving some help text.
         '''
-        html = resource_string("static/html/studioview.html")
+        html = self.render_template("studioview.html")
         frag = Fragment(html)
         return frag
 
@@ -113,27 +135,27 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
     # It should be included as a mixin.
 
     display_name = String(
-        default="Completion", scope=Scope.settings,
-        help="Display name"
+        default=_("Completion"), scope=Scope.settings,
+        help=_("Display name")
     )
 
     start = DateTime(
         default=None, scope=Scope.settings,
-        help="ISO-8601 formatted string representing the start date "
-             "of this assignment. We ignore this."
+        help=_("ISO-8601 formatted string representing the start date "
+               "of this assignment. We ignore this.")
     )
 
     due = DateTime(
         default=None, scope=Scope.settings,
-        help="ISO-8601 formatted string representing the due date "
-             "of this assignment. We ignore this."
+        help=_("ISO-8601 formatted string representing the due date "
+               "of this assignment. We ignore this.")
     )
 
     weight = Float(
-        display_name="Problem Weight",
-        help=("Defines the number of points each problem is worth. "
-              "If the value is not set, the problem is worth the sum of the "
-              "option point values."),
+        display_name=_("Problem Weight"),
+        help=_("Defines the number of points each problem is worth. "
+               "If the value is not set, the problem is worth the sum of the "
+               "option point values."),
         values={"min": 0, "step": .1},
         scope=Scope.settings
     )

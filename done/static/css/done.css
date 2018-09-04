@@ -8,15 +8,12 @@
     width:1px;
 }
 
-.done_onoffswitch_wrapper {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
+.done_onoffswitch, .done_onoffswitch-label, .done_onoffswitch-inner,  .done_onoffswitch-switch {
+    box-sizing: content-box;
 }
 
 .done_onoffswitch {
-    position: relative; width: 180px;
-    width: 180px;
+    display: inline-block;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
 
@@ -27,10 +24,11 @@
 .done_onoffswitch-label {
     display: block; overflow: hidden; cursor: pointer;
     border: 2px solid #999999; border-radius: 10px;
+    height: 30px;
 }
 
 .done_onoffswitch-inner {
-    display: block; width: 200%; margin-left: -100%;
+    display: block;
 }
 
 .done_animated .done_onoffswitch-inner {
@@ -38,22 +36,18 @@
     -o-transition: margin 0.1s ease-in 0s; transition: margin 0.1s ease-in 0s;
 }
 
-.done_onoffswitch-inner:before, .done_onoffswitch-inner:after {
-    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+.done_onoffswitch-inner .done_mark, .done_onoffswitch-inner .done_unmark {
+    display: block; height: 30px; padding: 0 10px; line-height: 30px;
     font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+    text-indent: 18px;
 }
 
-.done_onoffswitch-inner:after {
-    content: "Mark as complete";
-    padding-left: 40px;
+.done_onoffswitch-inner .done_mark {
     background-color: rgb(0, 158, 231); color: #FFFFFF;
 }
-.done_onoffswitch-inner:before {
-    content: "Unmark";
-    padding-right: 100px;
+.done_onoffswitch-inner .done_unmark {
     background-color: #EEEEEE; color: #999999;
-    text-align: right;
 }
 
 .done_animated .done_onoffswitch-switch {
@@ -62,22 +56,21 @@
 }
 
 .done_onoffswitch-switch {
-    height: 18px;
-    display: block; width: 18px; margin: 6px 6px 6px 6px;
+    height: 17px;
+    display: block; width: 17px; margin: 4px;
     padding: -20px -20px -20px -20px;
     background-position: center;
     border: 2px solid #999999; border-radius: 20px;
-    position: absolute; top: 0; bottom: 0; right: 146px;
-    content: "X";
-    text-color:black;
+    position: absolute;
+    color:black;
+}
+
+.done_onoffswitch-checkbox + .done_onoffswitch-label .done_onoffswitch-inner {
+    margin-top: -30px;
 }
 
 .done_onoffswitch-checkbox:checked + .done_onoffswitch-label .done_onoffswitch-inner {
-    margin-left: 0;
-}
-
-.done_onoffswitch-checkbox:checked + .done_onoffswitch-label .done_onoffswitch-switch {
-    right: 0px; 
+    margin-top: 0;
 }
 
 .done-checked {
@@ -86,36 +79,4 @@
 
 .done-unchecked {
     background-color: #FFFFFF;
-}
-
-.done_grow {
-    flex-grow: 1;
-}
-
-.done_nogrow {
-    flex-grow: 0;
-}
-
-/* Right to left (rtl) language css */
-
-body.rtl .done_onoffswitch-checkbox:checked + .done_onoffswitch-label .done_onoffswitch-inner {
-    margin-right: 0;
-}
-body.rtl .done_onoffswitch-checkbox:checked + .done_onoffswitch-label .done_onoffswitch-switch {
-    right: 0px;
-}
-
-body.rtl .done_onoffswitch-inner {
-    margin-right: -100%;
-}
-
-body.rtl .done_onoffswitch-inner:before {
-    padding-right: 10px;
-    text-align: right;
-}
-
-body.rtl .done_onoffswitch-inner:after {
-    padding-left: 22px;
-    float: left;
-    text-align: left;
 }
