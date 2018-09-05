@@ -1,9 +1,17 @@
+<style type="text/css">
+  .done_status-{id} .done_onoffswitch-inner:before {{
+    content: "{button_text_after}";
+  }}
+  .done_status-{id} .done_onoffswitch-inner:after {{
+    content: "{button_text_before}";
+  }}
+</style>
 <div class="done_onoffswitch_wrapper">
   <div class="done_left_spacer"></div>
   <div class="done_onoffswitch">
     <input type="checkbox" name="onoffswitch" class="done_onoffswitch-checkbox" id="{id}_myonoffswitch" checked="{done}">  </input>
-    <label class="done_onoffswitch-label" for="{id}_myonoffswitch">
-        <span class="done_aria_hidden">I have completed this</span>
+    <label class="done_onoffswitch-label done_status-{id}" for="{id}_myonoffswitch">
+        <span class="done_aria_hidden">{button_text}</span>
         <span class="done_onoffswitch-inner"></span>
         <span class="done_onoffswitch-switch"></span>
     </label>

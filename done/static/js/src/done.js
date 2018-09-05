@@ -20,26 +20,28 @@ function DoneXBlock(runtime, element, data) {
     $('.done_onoffswitch-checkbox', element).prop("checked", data.state);
 
     if (data.align != "right") {
-	$('.done_right_spacer', element).addClass("done_grow");
+    $('.done_right_spacer', element).addClass("done_grow");
     }
     if (data.align != "left") {
-	$('.done_left_spacer', element).addClass("done_grow");
+    $('.done_left_spacer', element).addClass("done_grow");
     }
 
     update_knob(element, data);
     var handlerUrl = runtime.handlerUrl(element, 'toggle_button');
 
     $(function ($) {
-	$('.done_onoffswitch', element).addClass("done_animated");
-	$('.done_onoffswitch-checkbox', element).change(function(){
-	    var checked = $('.done_onoffswitch-checkbox', element).prop("checked");
-	    $.ajax({
-		type: "POST",
-		url: handlerUrl,
-		data: JSON.stringify({'done':checked})
-	    });
-	    Logger.log("edx.done.toggled", {'done': checked});
-	    update_knob(element, data);
-	});
+    $('.done_onoffswitch', element).addClass("done_animated");
+    $('.done_onoffswitch-checkbox', element).change(function(){
+        var checked = $('.done_onoffswitch-checkbox', element).prop("checked");
+        return $.ajax({
+            type: "POST",
+            url: handlerUrl,
+            data: JSON.stringify({'done':checked})
+        })
+            .done(function(result) {
+                Logger.log("edx.done.toggled", {'done': checked});
+                update_knob(element, data);
+            });
+    });
     });
 }

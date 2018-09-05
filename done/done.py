@@ -1,11 +1,17 @@
 """ Show a toggle which lets students mark things as done."""
 
 import pkg_resources
+import re
 import uuid
+
+from django.utils.translation import ugettext as _
 
 from xblock.core import XBlock
 from xblock.fields import Scope, String, Boolean, DateTime, Float
 from xblock.fragment import Fragment
+
+from xblockutils.studio_editable import StudioEditableXBlockMixin
+
 
 def resource_string(path):
     """Handy helper for getting resources from our kit."""
@@ -13,7 +19,8 @@ def resource_string(path):
     return data.decode("utf8")
 
 
-class DoneXBlock(XBlock):
+@XBlock.needs("i18n")
+class DoneXBlock(StudioEditableXBlockMixin, XBlock):
     """
     Show a toggle which lets students mark things as done.
     """
@@ -25,11 +32,27 @@ class DoneXBlock(XBlock):
     )
 
     align = String(
-        scope=Scope.settings,
+        display_name=_("Alignment"),
+        scope=Scope.content,
         help="Align left/right/center",
         default="left"
     )
 
+    button_text_before = String(
+        display_name=_("Button text (incomplete)"),
+        scope=Scope.content,
+        help="Text displayed on the button before completion",
+        default="Mark as complete"
+    )
+
+    button_text_after = String(
+        display_name=_("Button text (complete)"),
+        scope=Scope.content,
+        help="Text displayed on the button after completion",
+        default="Mark as incomplete"
+    )
+
+    editable_fields = ['align', 'button_text_before', 'button_text_after']
     has_score = True
 
     # pylint: disable=unused-argument
@@ -59,9 +82,27 @@ class DoneXBlock(XBlock):
         The primary view of the DoneXBlock, shown to students
         when viewing courses.
         """
+
+        def css_content_escape(inputstr):
+            """
+            escape strings for CSS content attribute
+            """
+            # https://stackoverflow.com/a/25699953
+            css_content_re = r'''['"\n\\]'''
+            return re.sub(css_content_re, lambda m: '\\{:X} '.format(ord(m.group())), inputstr)
+
+        button_text_before = css_content_escape(self.button_text_before)
+        button_text_after = css_content_escape(self.button_text_after)
+        status_button_text = self.button_text_before if self.done else self.button_text_after
+
         html_resource = resource_string("static/html/done.html")
         html = html_resource.format(done=self.done,
-                                    id=uuid.uuid1(0))
+                                    id=uuid.uuid1(0),
+                                    button_text_before=button_text_before,
+                                    button_text_after=button_text_after,
+                                    button_text=status_button_text,
+                                    )
+
         (unchecked_png, checked_png) = (
             self.runtime.local_resource_url(self, x) for x in
             ('public/check-empty.png', 'public/check-full.png')
@@ -73,15 +114,8 @@ class DoneXBlock(XBlock):
         frag.initialize_js("DoneXBlock", {'state': self.done,
                                           'unchecked': unchecked_png,
                                           'checked': checked_png,
-                                          'align': self.align.lower()})
-        return frag
-
-    def studio_view(self, _context=None):  # pylint: disable=unused-argument
-        '''
-        Minimal view with no configuration options giving some help text.
-        '''
-        html = resource_string("static/html/studioview.html")
-        frag = Fragment(html)
+                                          'align': self.align.lower(),
+                                          })
         return frag
 
     @staticmethod
@@ -104,18 +138,18 @@ class DoneXBlock(XBlock):
     # It should be included as a mixin.
 
     display_name = String(
-        default="Completion", scope=Scope.settings,
+        default="Completion", scope=Scope.content,
         help="Display name"
     )
 
     start = DateTime(
-        default=None, scope=Scope.settings,
+        default=None, scope=Scope.content,
         help="ISO-8601 formatted string representing the start date "
              "of this assignment. We ignore this."
     )
 
     due = DateTime(
-        default=None, scope=Scope.settings,
+        default=None, scope=Scope.content,
         help="ISO-8601 formatted string representing the due date "
              "of this assignment. We ignore this."
     )
@@ -126,7 +160,7 @@ class DoneXBlock(XBlock):
               "If the value is not set, the problem is worth the sum of the "
               "option point values."),
         values={"min": 0, "step": .1},
-        scope=Scope.settings
+        scope=Scope.content
     )
 
     def has_dynamic_children(self):

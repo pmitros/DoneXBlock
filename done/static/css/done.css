@@ -15,8 +15,8 @@
 }
 
 .done_onoffswitch {
-    position: relative; width: 180px;
-    width: 180px;
+    position: relative;
+    width: auto;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
 
@@ -45,13 +45,13 @@
 }
 
 .done_onoffswitch-inner:after {
-    content: "Mark as complete";
+    content: "";
     padding-left: 40px;
     background-color: rgb(0, 158, 231); color: #FFFFFF;
 }
 .done_onoffswitch-inner:before {
-    content: "Unmark";
-    padding-right: 100px;
+    content: "";
+    padding-right: 40px;
     background-color: #EEEEEE; color: #999999;
     text-align: right;
 }
@@ -67,7 +67,7 @@
     padding: -20px -20px -20px -20px;
     background-position: center;
     border: 2px solid #999999; border-radius: 20px;
-    position: absolute; top: 0; bottom: 0; right: 146px;
+    position: absolute; top: 0; bottom: 0;
     content: "X";
     text-color:black;
 }
