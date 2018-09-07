@@ -16,8 +16,8 @@ def package_data(pkg, root):
 
 setup(
     name='done-xblock',
-    version='0.1',
-    description='done XBlock',   # TODO: write a better description.
+    version='0.2',
+    description="An XBlock for students to mark they've done something",
     packages=[
         'done',
     ],

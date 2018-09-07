@@ -6,6 +6,14 @@ import uuid
 from xblock.core import XBlock
 from xblock.fields import Scope, String, Boolean, DateTime, Float
 from xblock.fragment import Fragment
+try: 
+    from xblock.completable import CompletableXBlockMixin
+except ImportError:
+    class CompletableXBlockMixin:
+        """ No-op mixin for pre-Hawthorn Open edX versions """
+        def emit_completion(self, completion_percent):
+            pass
+
 
 def resource_string(path):
     """Handy helper for getting resources from our kit."""
@@ -13,7 +21,7 @@ def resource_string(path):
     return data.decode("utf8")
 
 
-class DoneXBlock(XBlock):
+class DoneXBlock(XBlock, CompletableXBlockMixin):
     """
     Show a toggle which lets students mark things as done.
     """
@@ -51,6 +59,7 @@ class DoneXBlock(XBlock):
             # This should move to self.runtime.publish, once that pipeline
             # is finished for XBlocks.
             self.runtime.publish(self, "edx.done.toggled", {'done': self.done})
+            self.emit_completion(grade)
 
         return {'state': self.done}
 
