@@ -1,33 +1,45 @@
-function DoneXBlockOn(runtime, element) {
-    $('.done_windshield', element).addClass("done_windshield_off").removeClass("done_windshield_on");
-    DoneXBlock(runtime, element);
+/* Dummy code to make sure events work in Workbench as well as
+ * edx-platform*/
+if (typeof Logger === 'undefined') {
+    var Logger = {
+        log: function(a, b) { return; }
+    };
 }
 
-function DoneXBlockOff(runtime, element) {
-    console.log("b");
-    $('.done_windshield', element).addClass("done_windshield_on").removeClass("done_windshield_off");
-    DoneXBlock(runtime, element);
+function update_knob(element, data) {
+  if($('.done_onoffswitch-checkbox', element).prop("checked")) {
+    $(".done_onoffswitch-switch", element).css("background-image", "url("+data['checked']+")");
+    $(".done_onoffswitch-switch", element).css("background-color", "#018801;");
+  } else {
+    $(".done_onoffswitch-switch", element).css("background-image", "url("+data['unchecked']+")");
+    $(".done_onoffswitch-switch", element).css("background-color", "#FFFFFF;");
+  }
 }
 
-function DoneXBlock(runtime, element) {
+function DoneXBlock(runtime, element, data) {
+    $('.done_onoffswitch-checkbox', element).prop("checked", data.state);
+
+    if (data.align != "right") {
+	$('.done_right_spacer', element).addClass("done_grow");
+    }
+    if (data.align != "left") {
+	$('.done_left_spacer', element).addClass("done_grow");
+    }
+
+    update_knob(element, data);
     var handlerUrl = runtime.handlerUrl(element, 'toggle_button');
 
-    function updateCount(result) {}
-
     $(function ($) {
-	// Don't have animations on for above class changes. This is probably not necessary. I 
-	// was seeing animations on page load. I did a few things to fix it. The line below 
-	// wasn't the one that fixed it, but I decided to keep it anyways. 
-	$('.done_windshield', element).addClass("done_windshield_animated")
-	$('.done_windshield', element).click(function(){
-            $(this).toggleClass("done_windshield_on");
-            $(this).toggleClass("done_windshield_off");
+	$('.done_onoffswitch', element).addClass("done_animated");
+	$('.done_onoffswitch-checkbox', element).change(function(){
+	    var checked = $('.done_onoffswitch-checkbox', element).prop("checked");
 	    $.ajax({
 		type: "POST",
 		url: handlerUrl,
-		data: JSON.stringify({"done":$(this).hasClass("done_windshield_off")}),
-		success: updateCount
+		data: JSON.stringify({'done':checked})
 	    });
+	    Logger.log("edx.done.toggled", {'done': checked});
+	    update_knob(element, data);
 	});
     });
 }

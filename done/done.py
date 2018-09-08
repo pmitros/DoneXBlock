@@ -1,77 +1,98 @@
-"""TO-DO: Show a toggle which lets students mark things as done."""
+""" Show a toggle which lets students mark things as done."""
 
 import pkg_resources
+import uuid
 
 from xblock.core import XBlock
-from xblock.fields import Scope, Integer, String, Boolean, DateTime, Float
+from xblock.fields import Scope, String, Boolean, DateTime, Float
 from xblock.fragment import Fragment
+try: 
+    from xblock.completable import CompletableXBlockMixin
+except ImportError:
+    class CompletableXBlockMixin:
+        """ No-op mixin for pre-Hawthorn Open edX versions """
+        def emit_completion(self, completion_percent):
+            pass
 
 
-class DoneXBlock(XBlock):
+def resource_string(path):
+    """Handy helper for getting resources from our kit."""
+    data = pkg_resources.resource_string(__name__, path)
+    return data.decode("utf8")
+
+
+class DoneXBlock(XBlock, CompletableXBlockMixin):
     """
     Show a toggle which lets students mark things as done.
     """
 
-    # Fields are defined on the class.  You can access them in your code as
-    # self.<fieldname>.
     done = Boolean(
-           scope = Scope.user_state, 
-           help = "Is the student done?",
-           default = False
-        )
+        scope=Scope.user_state,
+        help="Is the student done?",
+        default=False
+    )
 
     align = String(
-           scope = Scope.settings, 
-           help = "Align left/right/center",
-           default = "left"
-        )
+        scope=Scope.settings,
+        help="Align left/right/center",
+        default="left"
+    )
 
     has_score = True
 
-    def resource_string(self, path):
-        """Handy helper for getting resources from our kit."""
-        data = pkg_resources.resource_string(__name__, path)
-        return data.decode("utf8")
-
+    # pylint: disable=unused-argument
     @XBlock.json_handler
     def toggle_button(self, data, suffix=''):
-        self.done = data['done']
-        if data['done']:
-            grade = 1
-        else:
-            grade = 0
+        """
+        Ajax call when the button is clicked. Input is a JSON dictionary
+        with one boolean field: `done`. This will save this in the
+        XBlock field, and then issue an appropriate grade.
+        """
+        if 'done' in data:
+            self.done = data['done']
+            if data['done']:
+                grade = 1
+            else:
+                grade = 0
+            grade_event = {'value': grade, 'max_value': 1}
+            self.runtime.publish(self, 'grade', grade_event)
+            # This should move to self.runtime.publish, once that pipeline
+            # is finished for XBlocks.
+            self.runtime.publish(self, "edx.done.toggled", {'done': self.done})
+            self.emit_completion(grade)
 
-        self.runtime.publish(self, 'grade', {'value':grade, 'max_value': 1})
-        return {}
+        return {'state': self.done}
 
-
-    def student_view(self, context=None):
+    def student_view(self, context=None):  # pylint: disable=unused-argument
         """
         The primary view of the DoneXBlock, shown to students
         when viewing courses.
         """
-        html = self.resource_string("static/html/done.html")
-        frag = Fragment(html)#.format(uid=self.scope_ids.usage_id))
-        frag.add_css_url("//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css")
-        #frag.add_javascript_url("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
-        frag.add_javascript_url("//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js")
-        frag.add_css(self.resource_string("static/css/done.css"))
-        grow_left = 1
-        grow_right = 1
-        if self.align.lower() == "left":
-            grow_left = 0
-        if self.align.lower() == "right":
-            grow_right = 0
-        frag.add_css(".done_left_spacer {{ flex-grow:{l}; }} .done_right_spacer {{ flex-grow:{r}; }}".format(r=grow_right, l=grow_left))
-        frag.add_javascript(self.resource_string("static/js/src/done.js"))
-        if self.done:
-            frag.initialize_js("DoneXBlockOn")
-        else:
-            frag.initialize_js("DoneXBlockOff")
+        html_resource = resource_string("static/html/done.html")
+        html = html_resource.format(done=self.done,
+                                    id=uuid.uuid1(0))
+        (unchecked_png, checked_png) = (
+            self.runtime.local_resource_url(self, x) for x in
+            ('public/check-empty.png', 'public/check-full.png')
+        )
+
+        frag = Fragment(html)
+        frag.add_css(resource_string("static/css/done.css"))
+        frag.add_javascript(resource_string("static/js/src/done.js"))
+        frag.initialize_js("DoneXBlock", {'state': self.done,
+                                          'unchecked': unchecked_png,
+                                          'checked': checked_png,
+                                          'align': self.align.lower()})
         return frag
 
-    # TO-DO: change this to create the scenarios you'd like to see in the
-    # workbench while developing your XBlock.
+    def studio_view(self, _context=None):  # pylint: disable=unused-argument
+        '''
+        Minimal view with no configuration options giving some help text.
+        '''
+        html = resource_string("static/html/studioview.html")
+        frag = Fragment(html)
+        return frag
+
     @staticmethod
     def workbench_scenarios():
         """A canned scenario for display in the workbench."""
@@ -79,14 +100,17 @@ class DoneXBlock(XBlock):
             ("DoneXBlock",
              """<vertical_demo>
                   <done align="left"> </done>
-                  <done align="left"> </done>
+                  <done align="right"> </done>
+                  <done align="center"> </done>
                 </vertical_demo>
              """),
         ]
 
-    ## Everything below is stolen from https://github.com/edx/edx-ora2/blob/master/apps/openassessment/xblock/lms_mixin.py
-    ## It's needed to keep the LMS+Studio happy. 
-    ## It should be included as a mixin. 
+    # Everything below is stolen from
+    # https://github.com/edx/edx-ora2/blob/master/apps/openassessment/
+    #        xblock/lms_mixin.py
+    # It's needed to keep the LMS+Studio happy.
+    # It should be included as a mixin.
 
     display_name = String(
         default="Completion", scope=Scope.settings,
@@ -95,12 +119,14 @@ class DoneXBlock(XBlock):
 
     start = DateTime(
         default=None, scope=Scope.settings,
-        help="ISO-8601 formatted string representing the start date of this assignment. We ignore this."
+        help="ISO-8601 formatted string representing the start date "
+             "of this assignment. We ignore this."
     )
 
     due = DateTime(
         default=None, scope=Scope.settings,
-        help="ISO-8601 formatted string representing the due date of this assignment. We ignore this."
+        help="ISO-8601 formatted string representing the due date "
+             "of this assignment. We ignore this."
     )
 
     weight = Float(

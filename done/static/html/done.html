@@ -1,10 +1,12 @@
-<div class="done_block">
-  <div class="done_left_spacer"> </div>
-  <div class="done_windshield"> 
-    <div style="display:block; width:100%; height:6px"></div>
-    <div class="done_wipe done_wipe_off"> Undo </div>
-    <div class="done_wiper"> <span class="ui-icon ui-icon-circle-plus ui_icon_white" style="padding-bottom:2px"></span> </div>
-    <div class="done_wipe done_wipe_on"> Mark as complete </div>
+<div class="done_onoffswitch_wrapper">
+  <div class="done_left_spacer"></div>
+  <div class="done_onoffswitch">
+    <input type="checkbox" name="onoffswitch" class="done_onoffswitch-checkbox" id="{id}_myonoffswitch" checked="{done}">  </input>
+    <label class="done_onoffswitch-label" for="{id}_myonoffswitch">
+        <span class="done_aria_hidden">I have completed this</span>
+        <span class="done_onoffswitch-inner"></span>
+        <span class="done_onoffswitch-switch"></span>
+    </label>
   </div>
-  <div class="done_right_spacer"> </div>
+  <div class="done_right_spacer"></div>
 </div>
