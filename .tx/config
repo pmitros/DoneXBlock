@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[xblocks.xblock-done]
+source_file = done/translations/en/LC_MESSAGES/text.po
+file_filter = done/translations/<lang>/LC_MESSAGES/text.po
+source_lang = en
+type = PO
