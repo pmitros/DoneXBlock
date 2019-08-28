@@ -4,9 +4,9 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Pierre Mailhot <pierre.mailhot@gmail.com>, 2019
 # Keivan Farzaneh <keivan.farzaneh@edulib.org>, 2019
 # Omar Al-Ithawi <i@omardo.com>, 2019
+# Pierre Mailhot <pierre.mailhot@gmail.com>, 2019
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-27 13:08+0300\n"
 "PO-Revision-Date: 2019-07-27 10:08+0000\n"
-"Last-Translator: Omar Al-Ithawi <i@omardo.com>, 2019\n"
+"Last-Translator: Pierre Mailhot <pierre.mailhot@gmail.com>, 2019\n"
 "Language-Team: French (Canada) (https://www.transifex.com/open-edx/teams/6205/fr_CA/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,15 +25,15 @@ msgstr ""
 
 #: done/done.py:44
 msgid "Is the student done?"
-msgstr ""
+msgstr "Est-ce que l'étudiant a terminé ?"
 
 #: done/done.py:50
 msgid "Align left/right/center"
-msgstr ""
+msgstr "Aligner à gauche/droite/centre"
 
 #: done/done.py:139
 msgid "Completion"
-msgstr ""
+msgstr "Complétion"
 
 #: done/done.py:140
 msgid "Display name"
@@ -73,11 +73,11 @@ msgstr "X"
 
 #: done/static/html/done.html:8
 msgid "I have completed this"
-msgstr ""
+msgstr "J'ai complété ceci"
 
 #: done/static/html/done.html:10
 msgid "Unmark"
-msgstr ""
+msgstr "Décocher"
 
 #: done/static/html/done.html:11
 msgid "Mark as complete"
@@ -92,6 +92,12 @@ msgid ""
 "  can see in their progress page which portions are completed and \n"
 "  which still need to be watched or read."
 msgstr ""
+"Ceci est in composant très simple sans options de\n"
+"  conffiguration. Il est utilisé pour aider les étudiants à garder une trace de la\n"
+"  portion du cours qu'ils ont complété. Par exemple, vous pourriez\n"
+"  le placer sous chaque composant texte et vidéo, et les étudiants\n"
+"  peuvent voir dans leur page de progression quelles parties sont complétées et \n"
+"  qui doivent encore être regardées ou lues."
 
 #: done/static/html/studioview.html:10
 msgid ""
@@ -99,6 +105,9 @@ msgid ""
 "  completed something. They are less likely to skip material that\n"
 "  way."
 msgstr ""
+"Il est également utile de donner aux étudiants un moyen de signaler qu'ils ont\n"
+"  complété quelque chose. Ils sont moins susceptibles de sauter du matériel de cette\n"
+"  façon."
 
 #: done/static/html/studioview.html:14
 msgid ""
@@ -106,3 +115,6 @@ msgid ""
 "    add an align tag, which can left-, center-, or right-justify the\n"
 "    XBlock)"
 msgstr ""
+"(Si vous êtes un véritable utilisateur chevronné, dans OLX, nous vous permettons de\n"
+"    ajoutez une balise d’alignement qui peut justifier à gauche, au centre ou à droite le\n"
+"    XBlock)"
