@@ -1,16 +1,21 @@
 """ Show a toggle which lets students mark things as done."""
 
-import pkg_resources
+from __future__ import absolute_import
+
 import uuid
 
+import six
+
+import pkg_resources
 from xblock.core import XBlock
-from xblock.fields import Scope, String, Boolean, DateTime, Float
+from xblock.fields import Boolean, DateTime, Float, Scope, String
 from xblock.fragment import Fragment
+
 
 def resource_string(path):
     """Handy helper for getting resources from our kit."""
     data = pkg_resources.resource_string(__name__, path)
-    return data.decode("utf8")
+    return data.decode("utf8") if six.PY2 else data
 
 
 class DoneXBlock(XBlock):

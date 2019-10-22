@@ -1,6 +1,9 @@
 """Setup for done XBlock."""
 
+from __future__ import absolute_import
+
 import os
+
 from setuptools import setup
 
 
@@ -16,8 +19,12 @@ def package_data(pkg, root):
 
 setup(
     name='done-xblock',
-    version='0.1',
+    version='2.0',
     description='done XBlock',   # TODO: write a better description.
+    classifiers=[
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 3',
+    ]
     packages=[
         'done',
     ],
