@@ -24,7 +24,7 @@ setup(
     classifiers=[
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
-    ]
+    ],
     packages=[
         'done',
     ],
