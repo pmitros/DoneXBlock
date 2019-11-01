@@ -15,7 +15,7 @@ from xblock.fragment import Fragment
 def resource_string(path):
     """Handy helper for getting resources from our kit."""
     data = pkg_resources.resource_string(__name__, path)
-    return data.decode("utf8") if six.PY2 else data
+    return data.decode("utf8")
 
 
 class DoneXBlock(XBlock):
