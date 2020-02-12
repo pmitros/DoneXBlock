@@ -4,7 +4,7 @@
 XBlock==1.2.1
 
 # Internationalization and Localization requirements
-Django==1.8
+Django==1.11.28
 transifex-client==0.12.1
 edx-i18n-tools==0.4.5
 pycodestyle==2.4.0
