@@ -9,7 +9,7 @@ import six
 import pkg_resources
 from xblock.core import XBlock
 from xblock.fields import Boolean, DateTime, Float, Scope, String
-from xblock.fragment import Fragment
+from web_fragments.fragment import Fragment
 
 
 def resource_string(path):
