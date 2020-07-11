@@ -42,7 +42,7 @@ def is_requirement(line):
 
 setup(
     name='done-xblock',
-    version='2.0',
+    version='2.0.3',
     description='done XBlock',   # TODO: write a better description.
     classifiers=[
         'Programming Language :: Python :: 2',
