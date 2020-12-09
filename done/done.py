@@ -1,13 +1,18 @@
 """ Show a toggle which lets students mark things as done."""
 
-import pkg_resources
+from __future__ import absolute_import
+
 import os
 import uuid
 
+import six
+
+import pkg_resources
+
 from django.template import Context
 from xblock.core import XBlock
-from xblock.fields import Scope, String, Boolean, DateTime, Float
-from xblock.fragment import Fragment
+from xblock.fields import Boolean, DateTime, Float, Scope, String
+from web_fragments.fragment import Fragment
 from xblockutils.resources import ResourceLoader
 
 try:
@@ -24,7 +29,6 @@ def _(str):
     Dummy ugettext.
     """
     return str
-
 
 def resource_string(path):
     """Handy helper for getting resources from our kit."""

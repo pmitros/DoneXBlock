@@ -23,7 +23,7 @@ quality: ## check coding style with pycodestyle and pylint
 	pylint done
 
 requirements: ## install development environment requirements
-	pip install -r requirements-dev.txt --exists-action w
+	pip install -r requirements/development.txt --exists-action w
 
 selfcheck: ## check that the Makefile is well-formed
 	@echo "The Makefile is well-formed."
@@ -59,3 +59,9 @@ dummy_translations: ## generate dummy translation (.po) files
 build_dummy_translations: extract_translations dummy_translations compile_translations ## generate and compile dummy translation files
 
 validate_translations: build_dummy_translations detect_changed_source_translations ## validate translations
+
+upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
+upgrade: ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
+	pip install -q -r requirements/pip_tools.txt
+	pip-compile --upgrade -o requirements/pip_tools.txt requirements/pip_tools.in
+	pip-compile --upgrade -o requirements/base.txt requirements/base.in
