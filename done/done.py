@@ -5,9 +5,9 @@ import os
 import uuid
 
 from django.template import Context
+from web_fragments.fragment import Fragment
 from xblock.core import XBlock
 from xblock.fields import Scope, String, Boolean, DateTime, Float
-from xblock.fragment import Fragment
 from xblockutils.resources import ResourceLoader
 
 try:
