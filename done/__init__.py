@@ -1,1 +1,3 @@
-from .done import DoneXBlock
+"""
+Done XBlock.
+"""
