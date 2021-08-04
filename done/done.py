@@ -7,7 +7,7 @@ import uuid
 from django.template import Context
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
-from xblock.fields import Scope, String, Boolean, DateTime, Float
+from xblock.fields import Scope, String, Boolean, DateTime, Float, Set
 from xblockutils.resources import ResourceLoader
 
 try:
@@ -51,6 +51,11 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
         default="left"
     )
 
+    emoji_set = Set(scope=Scope.user_state, help=_("The set of emoji a student can react to"),
+                    default={'like', 'love', 'confused', 'none'})
+
+    emoji_selected = String(scope=Scope.user_state, help=_("Student selection"), default="none")
+
     has_score = True
 
     def render_template(self, path, context=None):
@@ -82,6 +87,24 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
             self.emit_completion(grade)
 
         return {'state': self.done}
+        
+# Don't touch anything up 
+    @XBlock.json_handler
+    def react_emoji(self, data, suffix=''):
+        """
+        Ajax call when one of the emoji, is selected. Input is a JSON dictionary
+        with one string field: `selected`, which should be one of the emoji set defined above 
+        """
+        if data['selected'] in self.emoji_set:
+            self.emoji_selected = data['selected']
+
+            react_event = {'value': self.emoji_selected}
+            self.runtime.publish(self, 'emoji', react_event)
+            # This should move to self.runtime.publish, once that pipeline
+            # is finished for XBlocks.
+            self.runtime.publish(self, "edx.done.react", {'selected_emoji': self.emoji_selected})
+
+        return {'selected': self.emoji_selected}
 
     @XBlock.supports("multi_device")
     def student_view(self, context=None):  # pylint: disable=unused-argument
@@ -92,6 +115,7 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
         html = self.render_template("done.html", {
             'done': self.done,
             'id': uuid.uuid1(0),
+            'selected':self.emoji_selected
         })
 
         (unchecked_png, checked_png) = (
@@ -106,6 +130,8 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
                                           'unchecked': unchecked_png,
                                           'checked': checked_png,
                                           'align': self.align.lower()})
+        frag.initialize_js("ReactXBlock",{'selected':self.emoji_selected})
+                                        
         return frag
 
     def studio_view(self, _context=None):  # pylint: disable=unused-argument
