@@ -124,13 +124,14 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
         )
 
         frag = Fragment(html)
+        print(html)
         frag.add_css(resource_string("static/css/done.css"))
         frag.add_javascript(resource_string("static/js/src/done.js"))
         frag.initialize_js("DoneXBlock", {'state': self.done,
                                           'unchecked': unchecked_png,
                                           'checked': checked_png,
                                           'align': self.align.lower()})
-        frag.initialize_js("ReactXBlock",{'selected':self.emoji_selected})
+        #frag.initialize_js("ReactXBlock",{'selected':self.emoji_selected})
                                         
         return frag
 

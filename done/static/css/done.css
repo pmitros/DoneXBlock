@@ -47,7 +47,7 @@
     background-color: rgb(0, 158, 231); color: #FFFFFF;
 }
 .done_onoffswitch-inner .done_unmark {
-    background-color: #EEEEEE; color: #999999;
+    background-color: emojis_reaction#EEEEEE; color: #999999;
 }
 
 .done_animated .done_onoffswitch-switch {
@@ -79,4 +79,16 @@
 
 .done-unchecked {
     background-color: #FFFFFF;
+}
+.emojis_reaction{
+    display: none;
+}
+
+.react_animated{
+
+    -webkit-transition: color 2s, font-size 2s;
+   -moz-transition: color 2s, font-size 2s;
+     -o-transition: color 2s, font-size 2s;
+        transition: color 2s, font-size 2s;
+
 }

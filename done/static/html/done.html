@@ -11,17 +11,19 @@
             <span class="done_mark">{% trans "Mark as complete" %}</span>
         </span>
     </label>
+    
   </div>
-  <div class="done_right_spacer"></div>
-  <div class="emojis_reaction">
-    <span class="emoji">
+  <div class="emojis_reaction" id="{{ id }}_emoji_con">
+    <span class="emoji" id="confused">
       ⁉️
     </span>
-    <span class="emoji">
+    <span class="emoji" id="love">
       ❤️
       </span>
-    <span class="emoji">
+    <span class="emoji" id="like">
       👍
     </span>
   </div>
+
+  <div class="done_right_spacer"></div>
 </div>
