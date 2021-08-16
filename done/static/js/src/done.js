@@ -11,7 +11,6 @@ function update_knob(element, data) {
 
     $(".done_onoffswitch-switch", element).css("background-image", "url("+data['checked']+")");
     $(".done_onoffswitch-switch", element).css("background-color", "#018801;");
-    console.log("eeee",data)
     $(".emojis_reaction",element).css("display","block");
   } else {
     $(".emojis_reaction",element).css("display","none")
@@ -21,18 +20,15 @@ function update_knob(element, data) {
 }
 
 function DoneXBlock(runtime, element, data) {
-  console.log("elem",element)
     $('.done_onoffswitch-checkbox', element).prop("checked", data.state);
 
     update_knob(element, data);
     var handlerUrl = runtime.handlerUrl(element, 'toggle_button');
     var handlerUrlEmoji = runtime.handlerUrl(element, 'react_emoji');
 
-    console.log("hanldeYr",handlerUrl)
 
     $('.emoji',element).click(function(e){
        
-      console.log(e.currentTarget.id);
       updateReaction(e.currentTarget.id,element,handlerUrlEmoji)
     })
   $(function ($) {
