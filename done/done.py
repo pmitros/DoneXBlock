@@ -138,7 +138,7 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
         '''
         Minimal view with no configuration options giving some help text.
         '''
-        html = self.render_template("studioview.html")
+        html = self.render_template("studioview.html",{'id':uuid.uuid1(0)})
         frag = Fragment(html)
         return frag
 
