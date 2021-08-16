@@ -2,8 +2,10 @@
 <div style="padding: 10px">
 
 <p>Please choose the if unmarking feature should be enabled or disabled for students </p>
-<input type="radio"  name="fav_language_{{ id }}" checked/>
-<input type="radio"  name="fav_language__{{ id }}"/>
+<input type="radio"  id="disabled_{{ id }}" value="disabeled"  name="unmarking_{{ id }}" checked />
+<label for="disabled_{{ id }}">Disabeled</label>
+<input type="radio" id="enabled_{{ id }}" value="enabled"  name="unmarking_{{ id }}"/>
+<label for="enabled_{{ id }}">Enabled</label>
 
 <!--
   <p>{% blocktrans %}This is a very simple component with no configuration
