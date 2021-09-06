@@ -137,7 +137,8 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
                                           'unchecked': unchecked_png,
                                           'checked': checked_png,
                                           'align': self.align.lower(),
-                                          'unmarking':self.unmarking})
+                                          'unmarking':self.unmarking,
+                                          'selected':self.emoji_selected})
         #frag.initialize_js("ReactXBlock",{'selected':self.emoji_selected})
                                         
         return frag

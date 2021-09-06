@@ -22,10 +22,10 @@ function update_knob(element, data) {
 
 function DoneXBlock(runtime, element, data) {
     $('.done_onoffswitch-checkbox', element).prop("checked", data.state);
-
     update_knob(element, data);
     var handlerUrl = runtime.handlerUrl(element, 'toggle_button');
     var handlerUrlEmoji = runtime.handlerUrl(element, 'react_emoji');
+    updateReaction(data.selected,element,handlerUrlEmoji)
 
 
     $('.emoji',element).click(function(e){
@@ -59,14 +59,20 @@ function DoneXBlock(runtime, element, data) {
 
 function updateReaction(react,element,url){
  reactions = ['confused','love','like'];
-  $("#"+react,element).addClass("react_animated");
- $("#"+react,element).css("font-size","20px")
 
  reactions.forEach(reactState=>{
-   if(reactState!==react){
-    $("#"+reactState,element).css("font-size","14px")
-   }
- })
+  if(reactState!==react){
+   $("#"+reactState,element).addClass('emoji_unselected')
+  }
+})
+if (react==='none') return;
+
+
+  $("#"+react,element).addClass("react_animated");
+  $("#"+react,element).removeClass("emoji_unselected");
+
+ $("#"+react,element).css("font-size","20px")
+
   $.ajax({
 		type: "POST",
 		url: url,

@@ -90,5 +90,19 @@
    -moz-transition: color 2s, font-size 2s;
      -o-transition: color 2s, font-size 2s;
         transition: color 2s, font-size 2s;
+        font-size: 20px;
+        margin:0;
 
+
+}
+.emoji_unselected{
+    margin: 0;
+    color: transparent;
+    text-shadow: 3px 3px 3px rgb(112, 112, 215);
+    font-size: 20px;
+}
+
+.emoji_unselected_before{
+    position: absolute;
+    text-shadow: 0 0 0 #fff;
 }

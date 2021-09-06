@@ -7,22 +7,23 @@
         <span class="done_onoffswitch-switch"><span class="done_aria_hidden">{% trans "X" %}</span></span>
         <span class="done_aria_hidden">{% trans "I have completed this" %}</span>
         <span class="done_onoffswitch-inner">
-            <span class="done_unmark">{% trans "Unmark" %}</span>
+            <span class="done_unmark">            <div class="emojis_reaction" id="{{ id }}_emoji_con">
+              <span class="emoji" title="confused" id="confused">
+                ⁉️
+              </span>
+              <span class="emoji" name="❤️" title="love" id="love">
+                ❤️
+                </span>
+              <span class="emoji" name="👍" title="like" id="like">
+                👍
+              </span>
+            </div>
+</span>
+          
             <span class="done_mark">{% trans "Mark as complete" %}</span>
         </span>
     </label>
     
-  </div>
-  <div class="emojis_reaction" id="{{ id }}_emoji_con">
-    <span class="emoji" id="confused">
-      ⁉️
-    </span>
-    <span class="emoji" id="love">
-      ❤️
-      </span>
-    <span class="emoji" id="like">
-      👍
-    </span>
   </div>
 
   <div class="done_right_spacer"></div>
