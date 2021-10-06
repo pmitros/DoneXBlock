@@ -25,12 +25,11 @@ function DoneXBlock(runtime, element, data) {
     update_knob(element, data);
     var handlerUrl = runtime.handlerUrl(element, 'toggle_button');
     var handlerUrlEmoji = runtime.handlerUrl(element, 'react_emoji');
-    updateReaction(data.selected,element,handlerUrlEmoji)
+    updateReaction(data.selected,element,handlerUrlEmoji,data)
 
 
     $('.emoji',element).click(function(e){
-       
-      updateReaction(e.currentTarget.id,element,handlerUrlEmoji)
+      updateReaction(e.currentTarget.id,element,handlerUrlEmoji,data)
     })
     if(data.state && !data.unmarking){
       $('.done_onoffswitch-checkbox', element)[0].disabled=true;
@@ -57,12 +56,12 @@ function DoneXBlock(runtime, element, data) {
   
 }
 
-function updateReaction(react,element,url){
- reactions = ['confused','love','like'];
+function updateReaction(react,element,url,data){
+ reactions = ['challenging','confident','confused','excited','ok'];
 
  reactions.forEach(reactState=>{
   if(reactState!==react){
-   $("#"+reactState,element).addClass('emoji_unselected')
+   $("#"+reactState,element).attr('src',data.emojis_faded_urls[reactState])
   }
 })
 if (react==='none') return;
@@ -70,6 +69,7 @@ if (react==='none') return;
 
   $("#"+react,element).addClass("react_animated");
   $("#"+react,element).removeClass("emoji_unselected");
+  $("#"+react,element).attr('src',data.emojis_urls[react])
 
  $("#"+react,element).css("font-size","20px")
 

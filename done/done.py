@@ -54,7 +54,7 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
                  help='Toggle unmarking for students',
                  default=False)
     emoji_set = Set(scope=Scope.user_state, help=_("The set of emoji a student can react to"),
-                    default={'like', 'love', 'confused', 'none'})
+                    default={'challenging','confident','confused','excited','ok', 'none'})
 
     emoji_selected = String(scope=Scope.user_state, help=_("Student selection"), default="none")
 
@@ -129,6 +129,17 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
             self.runtime.local_resource_url(self, x) for x in
             ('public/check-empty.png', 'public/check-full.png')
         )
+        emojis_names = ['challenging','confident','confused','excited','ok']
+
+        emojis_urls = dict(zip( emojis_names, (
+            self.runtime.local_resource_url(self,x) for x in 
+            ['public/emojis/' + name + '.svg' for name in emojis_names]
+        )))
+        emojis_faded_urls = dict(zip( emojis_names, (
+            self.runtime.local_resource_url(self,x) for x in 
+            ['public/emojis_faded/' + name + '_faded.svg' for name in emojis_names]
+        )))
+
 
         frag = Fragment(html)
         frag.add_css(resource_string("static/css/done.css"))
@@ -138,7 +149,9 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
                                           'checked': checked_png,
                                           'align': self.align.lower(),
                                           'unmarking':self.unmarking,
-                                          'selected':self.emoji_selected})
+                                          'selected':self.emoji_selected,
+                                          'emojis_urls':emojis_urls,
+                                           'emojis_faded_urls' :emojis_faded_urls })
         #frag.initialize_js("ReactXBlock",{'selected':self.emoji_selected})
                                         
         return frag
