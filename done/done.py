@@ -129,7 +129,7 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
             self.runtime.local_resource_url(self, x) for x in
             ('public/check-empty.png', 'public/check-full.png')
         )
-        emojis_names = ['challenging','confident','confused','excited','ok']
+        emojis_names = ['excited','confident','ok','challenging','confused']
 
         emojis_urls = dict(zip( emojis_names, (
             self.runtime.local_resource_url(self,x) for x in 

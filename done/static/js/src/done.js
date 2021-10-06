@@ -33,6 +33,7 @@ function DoneXBlock(runtime, element, data) {
     })
     if(data.state && !data.unmarking){
       $('.done_onoffswitch-checkbox', element)[0].disabled=true;
+      $('.done_onoffswitch-switch', element).css("display","none");
       return;
     } 
   $(function ($) {
@@ -42,6 +43,8 @@ function DoneXBlock(runtime, element, data) {
 
       if( !data.unmarking){
         $('.done_onoffswitch-checkbox', element)[0].disabled=true;
+        $('.done_onoffswitch-switch', element).css("display","none");
+
       }
 	    $.ajax({
 		type: "POST",
