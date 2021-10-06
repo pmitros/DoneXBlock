@@ -7,7 +7,7 @@ import uuid
 from django.template import Context
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
-from xblock.fields import Scope, String, Boolean, DateTime, Float
+from xblock.fields import Scope, String, Boolean, DateTime, Float, Set
 from xblockutils.resources import ResourceLoader
 
 try:
@@ -50,6 +50,13 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
         help=_("Align left/right/center"),
         default="left"
     )
+    unmarking = Boolean(scope=Scope.settings,
+                 help='Toggle unmarking for students',
+                 default=False)
+    emoji_set = Set(scope=Scope.user_state, help=_("The set of emoji a student can react to"),
+                    default={'challenging','confident','confused','excited','ok', 'none'})
+
+    emoji_selected = String(scope=Scope.user_state, help=_("Student selection"), default="none")
 
     has_score = True
 
@@ -83,6 +90,29 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
 
         return {'state': self.done}
 
+    @XBlock.json_handler
+    def toggle_unmarking(self,data,suffix=''):
+        self.unmarking =  data['unmarking']
+        return {'state':self.unmarking}
+    
+# Don't touch anything up 
+    @XBlock.json_handler
+    def react_emoji(self, data, suffix=''):
+        """
+        Ajax call when one of the emoji, is selected. Input is a JSON dictionary
+        with one unmarkingstring field: `selected`, which should be one of the emoji set defined above 
+        """
+        if data['selected'] in self.emoji_set:
+            self.emoji_selected = data['selected']
+
+            react_event = {'value': self.emoji_selected}
+            self.runtime.publish(self, 'emoji', react_event)
+            # This should move to self.runtime.publish, once that pipeline
+            # is finished for XBlocks.
+            self.runtime.publish(self, "edx.done.react", {'selected_emoji': self.emoji_selected})
+
+        return {'selected': self.emoji_selected}
+
     @XBlock.supports("multi_device")
     def student_view(self, context=None):  # pylint: disable=unused-argument
         """
@@ -92,12 +122,24 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
         html = self.render_template("done.html", {
             'done': self.done,
             'id': uuid.uuid1(0),
+            'selected':self.emoji_selected
         })
 
         (unchecked_png, checked_png) = (
             self.runtime.local_resource_url(self, x) for x in
             ('public/check-empty.png', 'public/check-full.png')
         )
+        emojis_names = ['excited','confident','ok','challenging','confused']
+
+        emojis_urls = dict(zip( emojis_names, (
+            self.runtime.local_resource_url(self,x) for x in 
+            ['public/emojis/' + name + '.svg' for name in emojis_names]
+        )))
+        emojis_faded_urls = dict(zip( emojis_names, (
+            self.runtime.local_resource_url(self,x) for x in 
+            ['public/emojis_faded/' + name + '_faded.svg' for name in emojis_names]
+        )))
+
 
         frag = Fragment(html)
         frag.add_css(resource_string("static/css/done.css"))
@@ -105,15 +147,25 @@ class DoneXBlock(XBlock, CompletableXBlockMixin):
         frag.initialize_js("DoneXBlock", {'state': self.done,
                                           'unchecked': unchecked_png,
                                           'checked': checked_png,
-                                          'align': self.align.lower()})
+                                          'align': self.align.lower(),
+                                          'unmarking':self.unmarking,
+                                          'selected':self.emoji_selected,
+                                          'emojis_urls':emojis_urls,
+                                           'emojis_faded_urls' :emojis_faded_urls })
+        #frag.initialize_js("ReactXBlock",{'selected':self.emoji_selected})
+                                        
         return frag
 
     def studio_view(self, _context=None):  # pylint: disable=unused-argument
         '''
         Minimal view with no configuration options giving some help text.
         '''
-        html = self.render_template("studioview.html")
+        id = str(uuid.uuid1(0))
+        html = self.render_template("studioview.html",{'id':id})
         frag = Fragment(html)
+        frag.add_javascript(resource_string("static/js/src/studioview.js"))
+        frag.initialize_js("Toggle_Unmarking", {'unmarking': self.unmarking,'id':id})
+
         return frag
 
     @staticmethod

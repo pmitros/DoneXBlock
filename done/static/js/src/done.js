@@ -8,9 +8,13 @@ if (typeof Logger === 'undefined') {
 
 function update_knob(element, data) {
   if($('.done_onoffswitch-checkbox', element).prop("checked")) {
+
+   
     $(".done_onoffswitch-switch", element).css("background-image", "url("+data['checked']+")");
     $(".done_onoffswitch-switch", element).css("background-color", "#018801;");
+    $(".emojis_reaction",element).css("display","block");
   } else {
+    $(".emojis_reaction",element).css("display","none")
     $(".done_onoffswitch-switch", element).css("background-image", "url("+data['unchecked']+")");
     $(".done_onoffswitch-switch", element).css("background-color", "#FFFFFF;");
   }
@@ -18,14 +22,30 @@ function update_knob(element, data) {
 
 function DoneXBlock(runtime, element, data) {
     $('.done_onoffswitch-checkbox', element).prop("checked", data.state);
-
     update_knob(element, data);
     var handlerUrl = runtime.handlerUrl(element, 'toggle_button');
+    var handlerUrlEmoji = runtime.handlerUrl(element, 'react_emoji');
+    updateReaction(data.selected,element,handlerUrlEmoji,data)
 
-    $(function ($) {
+
+    $('.emoji',element).click(function(e){
+      updateReaction(e.currentTarget.id,element,handlerUrlEmoji,data)
+    })
+    if(data.state && !data.unmarking){
+      $('.done_onoffswitch-checkbox', element)[0].disabled=true;
+      $('.done_onoffswitch-switch', element).css("display","none");
+      return;
+    } 
+  $(function ($) {
 	$('.done_onoffswitch', element).addClass("done_animated");
 	$('.done_onoffswitch-checkbox', element).change(function(){
 	    var checked = $('.done_onoffswitch-checkbox', element).prop("checked");
+
+      if( !data.unmarking){
+        $('.done_onoffswitch-checkbox', element)[0].disabled=true;
+        $('.done_onoffswitch-switch', element).css("display","none");
+
+      }
 	    $.ajax({
 		type: "POST",
 		url: handlerUrl,
@@ -33,6 +53,34 @@ function DoneXBlock(runtime, element, data) {
 	    });
 	    Logger.log("edx.done.toggled", {'done': checked});
 	    update_knob(element, data);
-	});
+    
     });
+});
+  
+}
+
+function updateReaction(react,element,url,data){
+ reactions = ['challenging','confident','confused','excited','ok'];
+
+ reactions.forEach(reactState=>{
+  if(reactState!==react){
+   $("#"+reactState,element).attr('src',data.emojis_faded_urls[reactState])
+  }
+})
+if (react==='none') return;
+
+
+  $("#"+react,element).addClass("react_animated");
+  $("#"+react,element).removeClass("emoji_unselected");
+  $("#"+react,element).attr('src',data.emojis_urls[react])
+
+ $("#"+react,element).css("font-size","20px")
+
+  $.ajax({
+		type: "POST",
+		url: url,
+		data: JSON.stringify({'selected':react})
+	    });
+
+
 }

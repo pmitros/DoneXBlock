@@ -47,7 +47,7 @@
     background-color: rgb(0, 158, 231); color: #FFFFFF;
 }
 .done_onoffswitch-inner .done_unmark {
-    background-color: #EEEEEE; color: #999999;
+    background-color: emojis_reaction#EEEEEE; color: #999999;
 }
 
 .done_animated .done_onoffswitch-switch {
@@ -79,4 +79,30 @@
 
 .done-unchecked {
     background-color: #FFFFFF;
+}
+.emojis_reaction{
+    display: none;
+}
+
+.react_animated{
+
+    -webkit-transition: color 2s, font-size 2s;
+   -moz-transition: color 2s, font-size 2s;
+     -o-transition: color 2s, font-size 2s;
+        transition: color 2s, font-size 2s;
+        font-size: 20px;
+        margin:0;
+
+
+}
+.emoji_unselected{
+    margin: 0;
+    color: transparent;
+    text-shadow: 3px 3px 3px rgb(112, 112, 215);
+    font-size: 20px;
+}
+
+.emoji_unselected_before{
+    position: absolute;
+    text-shadow: 0 0 0 #fff;
 }

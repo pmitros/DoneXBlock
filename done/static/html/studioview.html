@@ -1,5 +1,13 @@
 {% load i18n %}
 <div style="padding: 10px">
+
+<p>Please choose the if unmarking feature should be enabled or disabled for students </p>
+<input type="radio"  id="disabled_{{ id }}" value="disabeled"  name="unmarking_{{ id }}" checked />
+<label for="disabled_{{ id }}">Disabeled</label>
+<input type="radio" id="enabled_{{ id }}" value="enabled"  name="unmarking_{{ id }}"/>
+<label for="enabled_{{ id }}">Enabled</label>
+
+<!--
   <p>{% blocktrans %}This is a very simple component with no configuration
   options. It is used for helping student keep track of what
   portion of a course they've completed. For example, you might
@@ -14,4 +22,5 @@
   <p> <small>{% blocktrans %}(If you're a real power-user, in OLX, we do allow you to
     add an align tag, which can left-, center-, or right-justify the
     XBlock){% endblocktrans %}</small> </p>
+    -->
 </div>
